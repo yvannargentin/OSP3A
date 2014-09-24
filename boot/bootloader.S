@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-;Heil hitler
-=======
-#YOLO SWAGG YVANN
-
 A_CONSTANT	equ	0x100
 
 [BITS 16]
