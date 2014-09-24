@@ -29,4 +29,3 @@ A_CONSTANT	equ	0x100
 
 	; last 2 bytes of sector: indicate a bootable sector
 	dw 0xAA55
->>>>>>> FETCH_HEAD
