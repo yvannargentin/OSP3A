@@ -1,9 +1,14 @@
 [BITS 16]
-[ORG 0x7C00]
+[ORG 0x0]
 	
 	; initialize segments
-	; mov ds, 0x1000
+	mov ax, 0x7c0
+	mov ds, ax
+	
 	; setup stack
+	
+	mov ss, ax
+	mov sp, 0xffff
 
 	; reset drive
 
@@ -56,6 +61,9 @@ kernelLoader:
 readsector:
         int 0x13        ; BIOS interruption
         jc readsector  	; if error retry
+
+	mov ax, 0x1000
+	mov ds, ax
 
         jmp 0x1000:0x0000      ; Jump to the kernel
 
