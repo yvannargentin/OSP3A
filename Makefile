@@ -2,7 +2,7 @@ qemu : image.img
 	qemu-system-i386 -hda image.img
 
 image.img : boot.bin kernel.o util_asm.o main.o
-	ld86 -M -m -d -s -o kernel.img main.o kernel.o util_asm.o
+	ld86 -M -m -d -s -o kernel.img main.o kernel.o util_asm.o ./tools/io.o ./tools/syscall_handler.o ./tools/sector.o
 	dd if=/dev/zero of=image.img bs=512 count=100 
 	dd conv=notrunc seek=0 if=./boot.bin of=image.img 
 	dd conv=notrunc seek=1 if=./kernel.img of=image.img 
