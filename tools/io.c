@@ -1,7 +1,7 @@
 extern int interrupt(int number, int ax, int bx, int cx, int dx, int di);
 
 #define addr(idx, off) (idx * 256 + off)
-void print_string(char *buf){
+void print_string(char *buf){ 
 	int ax = addr(13, 1);
 	int length = sizeof(*buf);
 	int cx = addr(length, 0);
