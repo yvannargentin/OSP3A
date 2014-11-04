@@ -13,8 +13,7 @@ mov bp,sp
 mov dx,#_int80_stub ; get the address of the interruption service routine (ISR)
 push ds
 push si
-mov ax,#0 ; interrupts vectors start at address
-0x0000:0x0000
+mov ax,#0 ; interrupts vectors start at address 0x0000:0x0000
 mov ds,ax
 mov si,#int80_addr
 mov ax,cs ; have interrupt go to the current segment
