@@ -2,6 +2,7 @@ extern int interrupt(int number, int ax, int bx, int cx, int dx, int di);
 extern void print_string(char *buf);
 
 #define f(x, y) (x * 256 + y)
+typedef unsigned char uchar;
 
 void read_sector(int sector, uchar *buf){
 	int ax = f(2, 1);
