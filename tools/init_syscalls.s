@@ -10,8 +10,7 @@ int80_addr equ (0x80 * 4)
 _init_syscalls:
 push bp
 mov bp,sp
-mov dx,#_int80_stub ; get the address of the interruption
-service routine (ISR)
+mov dx,#_int80_stub ; get the address of the interruption service routine (ISR)
 push ds
 push si
 mov ax,#0 ; interrupts vectors start at address
@@ -26,13 +25,10 @@ pop ds
 pop bp
 ret
 ; Stub routine called when an interrupt 0x80 occurs.
-; This stub calls the syscall_handler function defined in the C
-code.
-; void syscall_handler(uint syscall_nb, uint arg1, uint arg2, uint
-arg3, arg4)
+; This stub calls the syscall_handler function defined in the C code.
+; void syscall_handler(uint syscall_nb, uint arg1, uint arg2, uint arg3, arg4)
 _int80_stub:
-; arguments are pushed from right to left (i.e. ax = 1st
-argument)
+; arguments are pushed from right to left (i.e. ax = 1st argument)
 push di
 push dx
 push cx
@@ -40,8 +36,7 @@ push bx
 push ax
 sti
 call _syscall_handler
-; The following pops are required but we don't care about
-their values.
+; The following pops are required but we don't care about their values.
 ; We just avoid popping into ax since we need to keep
 ; it unchanged as it stores the function's return value.
 pop bx
