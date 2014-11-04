@@ -11,7 +11,7 @@ boot.bin :
 	nasm ./boot/bootloader.asm -f bin -o boot.bin
 
 util_asm.o : 
-	as86 ./kernel/util_asm.s -o util_asm.o
+	as86 ./tools/util_asm.s -o util_asm.o
 	
 main.o : 
 	bcc -W -V -I -ansi -c ./kernel/main.c -o main.o
