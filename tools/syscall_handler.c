@@ -15,20 +15,26 @@ void syscall_handler(uint syscall_nb, uint arg1, uint arg2, uint arg3, uint arg4
 	switch(syscall_nb) {
 
 		case 1 :
+			// arg1 = string
 			print_string(arg1);
 		break;
 		
 		case 2 : 
+			//arg1 = buffer to hold user input
 			read_string(arg1);
 		break;
 
 		case 3 :
+			//arg1 = buffer to hold read string
+			// arg2 = sector number
 			read_sector(arg1, arg2);
 		break;
 
 		case 4 : 
 			write_sector(arg1, arg2);
 		break;
+		
+		default : print_string("invalid use of interruption 0x80");
 		
 
 	} 
