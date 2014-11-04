@@ -54,5 +54,4 @@ void read_string(char *buf){
 	// Writes a new line character to the screen 
 	ax = addr(13, endLine);
 	interrupt(0x10, ax, 0, 0, 0); 
-} 
 }
