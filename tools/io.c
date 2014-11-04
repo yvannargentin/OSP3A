@@ -10,8 +10,8 @@ void print_string(char *buf){
 		ax = addr(0x0E,buf[i]);
 		interrupt(0x10, ax, bx, 0, 0,0);
 	}
+	
 }
-
 void read_string(char *buf){
 	char enter = 0xd; 
 	char endLine = 0xa; 
