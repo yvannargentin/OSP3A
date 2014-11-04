@@ -1,7 +1,6 @@
 /*
 *  kernel.c
 */
-include "syscall_handler.h"
 
 void kernel(void)
 {
