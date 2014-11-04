@@ -3,11 +3,12 @@ extern int interrupt(int number, int ax, int bx, int cx, int dx, int di);
 #define addr(idx, off) (idx * 256 + off)
 void print_string(char *buf){ 
 	int i=0; 
-
+	int ax;
+	int bx = addr(0x0, 0x07);
 	for(i=0;buf[i]!='\0';i++){ 
 		char al = buf[i];
-		int ax = addr(0x13, al);
-		interrupt(0x10, ax, 0, 0, 0);
+		ax = addr(0x0E,buf[i]);
+		interrupt(0x10, ax, bx, 0, 0,0);
 	}
 }
 
