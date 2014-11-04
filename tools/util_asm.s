@@ -10,7 +10,18 @@ int80_addr equ (0x80 * 4)
 ; When an interrupt 0x80 occurs, it calls _int80_stub below.
 ; void init_syscalls()
 
+	
+data db 'a', 10, 13, 0
+	
 _init_syscalls:
+	;print char
+	mov si, data
+	mov ah, 0x0E		; Set registers to display a message
+	mov bh, 0x00		
+	mov bl, 0x07		
+	int 0x10		; Call video interrupt
+
+
 	push bp
 	mov bp,sp
 	mov dx,#_int80_stub ; get the address of the interruption service routine (ISR)
@@ -26,6 +37,9 @@ _init_syscalls:
 	pop ds
 	pop bp
 	ret
+
+
+
 
 ; Stub routine called when an interrupt 0x80 occurs.
 ; This stub calls the syscall_handler function defined in the C code.
