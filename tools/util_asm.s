@@ -14,12 +14,12 @@ int80_addr equ (0x80 * 4)
 	
 _init_syscalls:
 	;print char
-	data db 'a'
-	mov si, data 
-	mov ah, 0x0E		; Set registers to display a message
-	mov bh, 0x00		
-	mov bl, 0x07		
-	int 0x10		; Call video interrupt
+	;data db	'a'
+	;mov si, data 
+	;mov ah, 0x0E		; Set registers to display a message
+	;mov bh, 0x00		
+	;mov bl, 0x07		
+	;int 0x10		; Call video interrupt
 
 
 	push bp

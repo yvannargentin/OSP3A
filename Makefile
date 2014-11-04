@@ -1,7 +1,7 @@
 qemu : image.img
 	qemu-system-i386 -hda image.img
 
-image.img : ./object/boot.bin ./object/kernel.o ./object/util_asm.o ./object/main.o
+image.img : ./object/boot.bin ./object/kernel.o ./object/util_asm.o ./object/main.o ./object/syscall_handler.o ./object/interrupt.o ./object/io.o ./object/sector.o
 	ld86 -M -m -d -s -o kernel.img ./object/main.o ./object/kernel.o  ./object/util_asm.o ./object/syscall_handler.o ./object/interrupt.o ./object/io.o ./object/sector.o 
 	dd if=/dev/zero of=image.img bs=512 count=100 
 	dd conv=notrunc seek=0 if=./object/boot.bin of=image.img 
@@ -22,8 +22,11 @@ image.img : ./object/boot.bin ./object/kernel.o ./object/util_asm.o ./object/mai
 clean :
 	rm -f ./object/*.o ./object/*.bin image.img kernel.img
 
-precompile : 
+io.o :
 	bcc -W -V -I -ansi -c ./tools/io.c -o ./object/io.o
+./object/sector.o : 
 	bcc -W -V -I -ansi -c ./tools/sector.c -o ./object/sector.o
+./object/syscall_handler.o : 
 	bcc -W -V -I -ansi -c ./tools/syscall_handler.c -o ./object/syscall_handler.o
+./object/interrupt.o : 
 	as86 ./tools/interrupt.s -o ./object/interrupt.o
