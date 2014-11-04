@@ -1,8 +1,12 @@
 /*
 *  kernel.c
 */
-#define addr(idx, off) (idx * 256 + off)
+
+extern void init_syscalls();
+extern int interrupt(int number, int ax, int bx, int cx, int dx, int di);
 void print_str(char *buf);
+
+#define addr(idx, off) (idx * 256 + off)
 
 void kernel(void)
 {
