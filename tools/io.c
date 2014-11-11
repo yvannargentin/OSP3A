@@ -5,10 +5,14 @@ void print_string(char *buf){
 	int i=0; 
 	int ax, cx, bx;
 	char al = buf;
-	ax = addr(0x0e, al);
-	bx = addr(0x00, 0x07);
-	cx = addr(0, 1); //on affiche 1 caractère
-	interrupt(0x10, ax, bx, cx, 0,0);
+	
+	while(buf[i] !='\0'){
+		ax = addr(0x0e, buf[i]);
+		bx = addr(0x00, 0x07);
+		cx = addr(0, 1); //on affiche 1 caractère
+		interrupt(0x10, ax, bx, cx, 0,0);
+		i += 1;
+	}
 }
 
 //affiche les caractères tapés au clavier

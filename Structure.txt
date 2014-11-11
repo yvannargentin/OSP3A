@@ -9,7 +9,7 @@ SuperBlock
 •	BlockReservedContent : int[16]
 Bitmap 
 	Tab de 1024 entrés : char[1024]
-FileEntry : 
+FileEntry :  
 •	Name : char[32]
 •	Size : int
 •	TabIndexes : int[(256-34)/2]
