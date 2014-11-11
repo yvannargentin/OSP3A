@@ -6,6 +6,7 @@ image.img : ./object/boot.bin ./object/main.o ./object/kernel.o  ./object/util_a
 	dd if=/dev/zero of=image.img bs=512 count=100 
 	dd conv=notrunc seek=0 if=./object/boot.bin of=image.img 
 	dd conv=notrunc seek=1 if=./kernel.img of=image.img 
+	dd conv=notrunc seek=10 if=./fichier.txt of=image.img
 
 ./object/boot.bin : 
 	nasm ./boot/bootloader.asm -f bin -o ./object/boot.bin
