@@ -1,0 +1,50 @@
+Utiliser interruption 42
+					ASSEMBLEUR
+; structure memoire (pointé sur ds:si) (ds = 1000 ne change pas) (si = adresse du packet)
+packet :
+	size 			db 0x10
+	reserved 		db 0
+	sect_count 		db KERN_SIZE ; 1
+	addr_offset 	db 0		; ou on veut copier le ce que l'on a lu (parametre des fonctions)
+	addr_segment 	db KERN_SEG
+	first_sect 		db KERN_START ; depuis ou on veut commencer à lire (index logique linéaire)
+
+	_read_sector_raw :
+	push bp
+	mov bp, sp
+	
+	mov ah, #0x42
+	mov dx, [bp+4]
+	mov si, [bp+6]
+	mov bx, ds
+	mov [si+6], bx	 ;fixup the segment
+	int #0x13
+	
+	pop bp
+	ret
+	
+	
+				CODE EN C
+; vois read_sector_raw(int sector_number, uchar *buf){
+	packet p
+	p.size = 0x10;
+	p.reserved = 0;
+	p.sect_count = 1;
+	p.buf_offset = buf;
+	//p.buf_segment => segment is set in the asm code
+	p.first_sect[0] = sector_number;
+	p.first_sect[1] = 0;
+	p.first_sect[2] = 0;
+	p.first_sect[3] = 0;
+	read_sector_raw(BOOT_DRIVE, &p); // BOOT_DRIVE = 0x80
+}
+	
+; en C (definie dans le kernel)
+struct packet {
+	uchar size;
+	uchar reserved;
+	uint sect_count;
+	uint buf_offset;
+	uint buf_segment;
+	uint first_sect[4];
+}
