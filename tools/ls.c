@@ -21,7 +21,7 @@ typedef struct sfs {
 	FileEntries fe;
 	char fileContent[256][1024];
 } sfs;
-
+ 
 
 int ls(int argc, char ** argv) {
 	struct Superblock mySuperBlock;
