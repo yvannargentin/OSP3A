@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdio.h>
 
 typedef struct SuperBlock{
 	char signature[8];
@@ -20,18 +21,20 @@ typedef struct sfs {
 	char bitmap[1024];
 	FileEntries fe;
 	char fileContent[256][1024];
-} sfs;
+} SimpleFileSystem;
 
 int main (int argc, char *argv){
+	SimpleFileSystem sfs;
 	strcpy(sfs.sb.signature, "SFSv0100");
 	sfs.sb.nbSecteurs = 2;
 	sfs.sb.tailleBitmap = 1;
 	sfs.sb.tailleFE = 256;
 	sfs.sb.blockReservedFE = 16;
-	sfs.sb.blockReserverContent = 16;
+	sfs.sb.blockReserverContent = 256;
 
-	//Remplir que avec des 0
-	for()
-
-	//char superblock_string[18] }
+	//Remplir bitmap que avec des 0
+	int i;
+	for(i=0; i<sizeof(sfs.bitmap); i++){
+		sfs.bitmap[i] = '0';
+	}
 }

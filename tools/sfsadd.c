@@ -1,72 +1,83 @@
 #include <stdio.h>
+#include <string.h>
 #define block 1024
 
-struct fileEntry {
-	char Name[32];
-	int Size;
-	int TabIndexes[16];
+typedef struct SuperBlock{
+	char signature[8];
+	int nbSecteurs;
+	int tailleBitmap;
+	int tailleFE; //FE = FileEntry
+	int blockReservedFE;
+	int blockReserverContent;
+} SuperBlock;
 
-};
+typedef struct FileEntries{
+	char name[32];
+	int size;
+	int tabIndexes[111]; //111 = (tailleFE-name-size)/2
+} FileEntries;
+
+typedef struct SimpleFileSystem {
+	SuperBlock sb;
+	char bitmap[1024];
+	FileEntries fe;
+	char fileContent[256][1024];
+} SimpleFileSystem;
 
 
-typedef struct fileEntry fe;
+SimpleFileSystem init(){
+	SimpleFileSystem sfs;
+	strcpy(sfs.sb.signature, "SFSv0100");
+	sfs.sb.nbSecteurs = 2;
+	sfs.sb.tailleBitmap = 1;
+	sfs.sb.tailleFE = 256;
+	sfs.sb.blockReservedFE = 16;
+	sfs.sb.blockReserverContent = 256;
 
-struct SysFileSimple {
-	char superblock[block] ;
-	char bitmap[block] ;
-	fe fileEntry;
-	char fileContent[block] ;
-};
-
-typedef struct SysFileSimple SysFichier;
-
-SysFichier init(){
-	SysFichier sf;
-	int i;	
-	for (i=0; i< block; i++)
-		sf.bitmap[i] = '1';
-
-	
-	sf.bitmap[32] = '0';
-	for (i=0; i< 16;i++)
-		sf.fileEntry.TabIndexes[i] = 0;
-
-	return sf;
+	//Remplir bitmap que avec des 0
+	int i;
+	for(i=0; i<sizeof(sfs.bitmap); i++){
+		sfs.bitmap[i] = '1';
+	}
+	sfs.bitmap[32] = '0';
+	return sfs;
 
 	
 }
 
-void sfsadd(SysFichier sfs , char filename[32], char contenu){
-	int i, j, r;
+void sfsadd(SimpleFileSystem sfs , char filename[32], char contenu[1024]){
+	int i, j, r, h;
 	// initalisation du file entry avec le nom et la taille	
 	for (j=0;j< 32; j++){
 		if (filename[j] == '\0'){
-			for (r = j; r < (32 - j); r++)
-				sfs.fileEntry.Name[r] = '0';
+			for (r = j; r < (32 - j); r++){
+				sfs.fe.name[r] = '0';
+			}
 			break;
 		} else
-			sfs.fileEntry.Name[j] = filename[j];
+			sfs.fe.name[j] = filename[j];
 	}
 
-	sfs.fileEntry.Size = 10;
-	printf("%d\n", sfs.fileEntry.Size);
+	sfs.fe.size = 10;
+	//printf("size%d\n", sfs.fe.size);
 
-	for (j=0;j< 32; j++)
-		printf("%c", sfs.fileEntry.Name[j]);
 	
 	for (i=0; i< block; i++){
 		if (sfs.bitmap[i] == '0'){ // si block libre
 			
-			sfs.fileEntry.TabIndexes[i] = i;
-			sfs.fileContent[i] = contenu;
-			printf("%c", sfs.fileContent[i]);
+			sfs.fe.tabIndexes[i] = i;
+			//printf("%d", sfs.fe.tabIndexes[i]);
+			for (j=0; j< sizeof(contenu); j++){
+				sfs.fileContent[i][j] = contenu[j];
+				//printf("%c", sfs.fileContent[i][j]);				
+			}
 		}
 			
 	}
 }
 
 int main(){
-	SysFichier sfs = init();
-	sfsadd(sfs, "test.txt\0", 'h');
+	SimpleFileSystem sfs = init();
+	sfsadd(sfs, "test.txt\0", "hello");
 	return 0;
 }
