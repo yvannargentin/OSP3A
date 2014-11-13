@@ -24,13 +24,13 @@ clean :
 	rm -f ./object/*.o ./object/*.bin image.img kernel.img
 
 ./object/io.o:
-	bcc -W -V -I -ansi -c ./tools/io.c -o ./object/io.o
+	bcc -W -V -I -ansi -c ./kernel/io.c -o ./object/io.o
 
 ./object/sector.o:
-	bcc -W -V -I -ansi -c ./tools/sector.c -o ./object/sector.o
+	bcc -W -V -I -ansi -c ./kernel/sector.c -o ./object/sector.o
 
 ./object/syscall_handler.o : 
-	bcc -W -V -I -ansi -c ./tools/syscall_handler.c -o ./object/syscall_handler.o
+	bcc -W -V -I -ansi -c ./kernel/syscall_handler.c -o ./object/syscall_handler.o
 
 ./object/interrupt.o: 
-	as86 ./tools/interrupt.s -o ./object/interrupt.o
+	as86 ./kernel/interrupt.s -o ./object/interrupt.o

@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdio.h>
 
 typedef struct SuperBlock{
 	char signature[8];
@@ -20,18 +21,16 @@ typedef struct sfs {
 	char bitmap[1024];
 	FileEntries fe;
 	char fileContent[256][1024];
-} sfs;
+} SimpleFileSystem;
+
  
 
-int ls(int argc, char ** argv) {
-	struct Superblock mySuperBlock;
-	struct Bitmap myBitmap;
-	struct FileEntries MyFileEntries;
+int ls(sfs monSFS) {
 	int nbFiles = 0;
 	bool continuer = true;
 	printf(" - Nom - Taille -\r\n");
 	while(continuer){
-		printf(" - %s - %d -\r\n",MyFileEntries.Name,MyFileEntries.Size);
+		printf(" - %s - %d -\r\n",monSFS.FileEntries.Name,monSFS.FileEntries.Size);
 		nbFiles++;
 	}
 	printf("pour un total de %d fichiers...\r\n",nbFiles);
