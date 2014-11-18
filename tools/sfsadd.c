@@ -1,83 +1,58 @@
 #include <stdio.h>
 #include <string.h>
-#define block 1024
 
-typedef struct SuperBlock{
-	char signature[8];
-	int nbSecteurs;
-	int tailleBitmap;
-	int tailleFE; //FE = FileEntry
-	int blockReservedFE;
-	int blockReserverContent;
-} SuperBlock;
-
-typedef struct FileEntries{
-	char name[32];
-	int size;
-	int tabIndexes[111]; //111 = (tailleFE-name-size)/2
-} FileEntries;
-
-typedef struct SimpleFileSystem {
-	SuperBlock sb;
-	char bitmap[1024];
-	FileEntries fe;
-	char fileContent[256][1024];
-} SimpleFileSystem;
-
-
-SimpleFileSystem init(){
-	SimpleFileSystem sfs;
-	strcpy(sfs.sb.signature, "SFSv0100");
-	sfs.sb.nbSecteurs = 2;
-	sfs.sb.tailleBitmap = 1;
-	sfs.sb.tailleFE = 256;
-	sfs.sb.blockReservedFE = 16;
-	sfs.sb.blockReserverContent = 256;
-
-	//Remplir bitmap que avec des 0
-	int i;
-	for(i=0; i<sizeof(sfs.bitmap); i++){
-		sfs.bitmap[i] = '1';
-	}
-	sfs.bitmap[32] = '0';
-	return sfs;
-
-	
-}
-
-void sfsadd(SimpleFileSystem sfs , char filename[32], char contenu[1024]){
+void sfsadd(SimpleFileSystem sfs , char filename[32]){
 	int i, j, r, h;
-	// initalisation du file entry avec le nom et la taille	
-	for (j=0;j< 32; j++){
-		if (filename[j] == '\0'){
-			for (r = j; r < (32 - j); r++){
-				sfs.fe.name[r] = '0';
-			}
-			break;
-		} else
-			sfs.fe.name[j] = filename[j];
-	}
-
-	sfs.fe.size = 10;
-	//printf("size%d\n", sfs.fe.size);
-
+	int block = 1024;
 	
+	// lecture du fichier et recuperation du contenu
+	FILE *fp;
+	fp = fopen(filename, "r");
+	int taille = 10;
+	char contenu[taille];
+	bool fileInit = false;
+		
+	// lecture du bitmap
 	for (i=0; i< block; i++){
 		if (sfs.bitmap[i] == '0'){ // si block libre
 			
-			sfs.fe.tabIndexes[i] = i;
-			//printf("%d", sfs.fe.tabIndexes[i]);
-			for (j=0; j< sizeof(contenu); j++){
-				sfs.fileContent[i][j] = contenu[j];
-				//printf("%c", sfs.fileContent[i][j]);				
+			if (fp == NULL){
+				printf("impossible d'ouvrir le fichier");
+				break; 
+			}else{
+			
+				// initalisation du file entry avec le nom et la taille	
+				if (fileInit == false){
+					for (j=0;j< 32; j++)
+						sfs.fe[i].name[j] = filename[j];
+					
+					printf("%s ", sfs.fe[i].name);
+					
+					// recuperer taille fichier
+					sfs.fe[i].size = ftell(fp);
+					sfs.fe[i].tabIndexes[i] = i;
+					printf("%s ", sfs.fe[i].size);
+					fileInit = true;
+				}
+				
+				printf(" block %d libre ", i);
+				fgets(contenu, taille, fp); // recupere contenu fichier	
+
+				// ajoute le contenu du fichier par block dans le fileContent correspondant
+				for (j=0; j< taille; j++){
+					sfs.fileContent[i][j] = contenu[j];
+					printf("%c", sfs.fileContent[i][j]);				
+				}
+				
+				if(fgetc(fp) != EOF){
+					// vide le tableau contenant le contenu
+					memset (contenu, 0, taille); 
+					// se positionne à l'endroit ou le bout de contenu s'est arreter
+					fseek(fp, taille,0); 
+				}else
+					break;
 			}
 		}
 			
 	}
-}
-
-int main(){
-	SimpleFileSystem sfs = init();
-	sfsadd(sfs, "test.txt\0", "hello");
-	return 0;
 }
