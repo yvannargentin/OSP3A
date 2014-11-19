@@ -20,6 +20,8 @@ void print_string(char *buf){
 		print_char(buf[i]);
 		i += 1;
 	}
+	print_char(10);
+	print_char(13);
 }
 
 //affiche les caractères tapés au clavier
@@ -28,8 +30,10 @@ void read_string(char *buf){
 	int i = 0;
 	while(ascii != 0xd){
 		ascii = interrupt(0x16, 0, 0, 0, 0);
-		print_string(ascii);
+		print_char(ascii);
 		buf[i] = ascii;
 		i++;
 	}
+	print_char(10);
+	print_char(13);
 }
