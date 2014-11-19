@@ -12,7 +12,7 @@ image.img : ./object/boot.bin ./object/main.o ./object/kernel.o  ./object/util_a
 	nasm ./boot/bootloader.asm -f bin -o ./object/boot.bin
 
 ./object/util_asm.o : 
-	as86 ./tools/util_asm.s -o ./object/util_asm.o
+	as86 ./kernel/util_asm.s -o ./object/util_asm.o
 	
 ./object/main.o : 
 	bcc -W -V -I -ansi -c ./kernel/main.c -o ./object/main.o 

@@ -1,16 +1,23 @@
 extern int interrupt(int number, int ax, int bx, int cx, int dx, int di);
 
-#define addr(idx, off) (idx * 256 + off)
+#define pack(h, l) (h * 256 + l)
+
+void print_char(char c) {
+	int ax, cx, bx;
+	char al = c;
+	ax = pack(0x0e, c);
+	bx = pack(0x00, 0x07);
+	cx = pack(0, 1); //on affiche 1 caractère
+	interrupt(0x10, ax, bx, cx, 0,0);
+}
+
 void print_string(char *buf){ 
 	int i=0; 
 	int ax, cx, bx;
 	char al = buf;
 	
 	while(buf[i] !='\0'){
-		ax = addr(0x0e, buf[i]);
-		bx = addr(0x00, 0x07);
-		cx = addr(0, 1); //on affiche 1 caractère
-		interrupt(0x10, ax, bx, cx, 0,0);
+		print_char(buf[i]);
 		i += 1;
 	}
 }
