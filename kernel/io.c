@@ -34,6 +34,7 @@ void read_string(char *buf){
 		buf[i] = ascii;
 		i++;
 	}
+	buf[i] = '\0';
 	print_char(10);
 	print_char(13);
 }
