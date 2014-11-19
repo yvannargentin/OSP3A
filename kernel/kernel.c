@@ -4,10 +4,10 @@
 
 #define addr(idx, off) (idx * 256 + off)
 
-char *str;
 
-void kernel(void)
-{
+
+void kernel(void) {
+	char *str;
 	
 	// print_string(str); 	// fonctionne
 	init_syscalls(); 	// ecrase interruption 80 pour la notre
@@ -16,6 +16,7 @@ void kernel(void)
 	while(1) {
 		interrupt(0x80,2,str,0,0);
 		interrupt(0x80,1,str,0,0);
+		str = "";
 	}
 	while(1); 	// évite d'aller lire plus loin
 }
