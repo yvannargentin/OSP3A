@@ -3,6 +3,10 @@
 #include <stdbool.h>
 #include "structure.h"
 
+extern void sfsadd(SimpleFileSystem sfs , char filename[32]);
+extern void sfsls(SimpleFileSystem sfs);
+extern void sfsdel(SimpleFileSystem sfs, char filename[32]);
+
 SimpleFileSystem sfscreate (char *sfsName){
 	SimpleFileSystem sfs;
 	strcpy(sfs.sb.signature, "SFSv0100");

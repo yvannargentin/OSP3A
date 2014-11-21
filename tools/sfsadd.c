@@ -16,13 +16,13 @@ void sfsadd(SimpleFileSystem sfs , char filename[32]){
 		
 	// lecture du bitmap
 	for (i=0; i< block; i++){
-		if (sfs.bitmap[i] == '0'){ // si block libre
+		if (sfs.bitmap[i] == 0){ // si block libre
 			
 			if (fp == NULL){
 				printf("impossible d'ouvrir le fichier");
 				break; 
 			}else{
-			
+				sfs.bitmap[i] = 1;
 				// initalisation du file entry avec le nom et la taille	
 				if (fileInit == false){
 					for (j=0;j< 32; j++)
