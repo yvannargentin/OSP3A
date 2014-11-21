@@ -1,8 +1,9 @@
 #include <string.h>
 #include <stdio.h>
+#include "structure.h"
 
 
-void sfsdel(sfs x, char* file) {
+void sfsdel(SimpleFileSystem x, char* file) {
 	char fileToDelete[32] = file;
 	
 	int fileEntryIndex = 0;

@@ -1,5 +1,7 @@
-#include <stdio.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "structure.h"
 
 void sfsadd(SimpleFileSystem sfs , char filename[32]){
 	int i, j, r, h;
@@ -26,22 +28,23 @@ void sfsadd(SimpleFileSystem sfs , char filename[32]){
 					for (j=0;j< 32; j++)
 						sfs.fe[i].name[j] = filename[j];
 					
-					printf("%s ", sfs.fe[i].name);
+					//printf("%s ", sfs.fe[i].name);
 					
 					// recuperer taille fichier
-					sfs.fe[i].size = ftell(fp);
+					//sfs.fe[i].size = ftell(fp);
+					sfs.fe[i].size = 142;
 					sfs.fe[i].tabIndexes[i] = i;
-					printf("%s ", sfs.fe[i].size);
+					//printf("%s ", sfs.fe[i].size);
 					fileInit = true;
 				}
 				
-				printf(" block %d libre ", i);
+				//printf(" block %d libre ", i);
 				fgets(contenu, taille, fp); // recupere contenu fichier	
 
 				// ajoute le contenu du fichier par block dans le fileContent correspondant
 				for (j=0; j< taille; j++){
 					sfs.fileContent[i][j] = contenu[j];
-					printf("%c", sfs.fileContent[i][j]);				
+					//printf("%c", sfs.fileContent[i][j]);				
 				}
 				
 				if(fgetc(fp) != EOF){

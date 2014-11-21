@@ -30,6 +30,9 @@ typedef struct sfs {
 } SimpleFileSystem;
 
 SimpleFileSystem sfscreate (char *sfsName);
-void sfsadd(SimpleFileSystem sfs , char filename[32]);
-
+/*
+extern void sfsadd(SimpleFileSystem sfs , char filename[32]);
+extern void sfsls(SimpleFileSystem sfs);
+extern void sfsdel(SimpleFileSystem sfs, char filename[32]);
+*/
 #endif

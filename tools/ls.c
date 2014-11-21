@@ -1,28 +1,6 @@
 #include <string.h>
 #include <stdio.h>
-
-typedef struct SuperBlock{
-	char signature[8];
-	int nbSecteurs;
-	int tailleBitmap;
-	int tailleFE; //FE = FileEntry
-	int blockReservedFE;
-	int blockReserverContent;
-} SuperBlock;
-
-typedef struct FileEntries{
-	char name[32];
-	int size;
-	int tabIndexes[111]; //111 = (tailleFE-name-size)/2
-} FileEntries;
-
-typedef struct sfs {
-	SuperBlock sb;
-	char bitmap[1024];
-	FileEntries fe;
-	char fileContent[256][1024];
-} SimpleFileSystem;
-
+#include <structure.h>
  
 
 int ls(sfs monSFS) {
@@ -30,8 +8,10 @@ int ls(sfs monSFS) {
 	bool continuer = true;
 	printf(" - Nom - Taille -\r\n");
 	while(continuer){
-		printf(" - %s - %d -\r\n",monSFS.FileEntries.Name,monSFS.FileEntries.Size);
+		printf(" - %s - %d -\r\n",monSFS.fe[nbFiles].name,monSFS.fe[nbFiles].size);
 		nbFiles++;
+		if(nbFiles >= monSFS.sb.tailleFE - 1  || monSFS.fe[nbFiles].name == '0' )
+			continuer = false;
 	}
 	printf("pour un total de %d fichiers...\r\n",nbFiles);
 
