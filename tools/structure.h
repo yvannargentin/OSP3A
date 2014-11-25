@@ -1,3 +1,12 @@
+#ifndef STRUCTURE__
+#define STRUCTURE__
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
 typedef struct SuperBlock{
 	char signature[8];
 	int nbSecteurs;
@@ -19,3 +28,8 @@ typedef struct sfs {
 	FileEntries fe[64];
 	char fileContent[256][1024];
 } SimpleFileSystem;
+
+SimpleFileSystem sfscreate (char *sfsName);
+void sfsadd(SimpleFileSystem sfs , char filename[32]);
+
+#endif

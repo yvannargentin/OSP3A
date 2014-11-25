@@ -1,7 +1,6 @@
 ;util_asm.s
 .global _init_syscalls
 .global _syscall_handler
-.global _printString
 .extern _syscall_handler
 ; interrupt 0x80 vector (80 * 4 = 320)
 ; interrupts vectors start at address 0x0000:0x0000
@@ -11,11 +10,7 @@ int80_addr equ (0x80 * 4)
 ; When an interrupt 0x80 occurs, it calls _int80_stub below.
 ; void init_syscalls()
 
-	
-	
 _init_syscalls:
-
-
 	push bp
 	mov bp,sp
 	mov dx,#_int80_stub ; get the address of the interruption service routine (ISR)
@@ -57,27 +52,6 @@ _int80_stub:
 	pop bx
 	pop bx
 	iret ; pop ip, cs and flags registers (3 registe
-
-;------------- display message function -------------;
-
-printCharacter:			; Procedure to print character on screen
-	mov ah, 0x0E		; Set registers to display a message
-	mov bh, 0x00		
-	mov bl, 0x07		
-	int 0x10		; Call video interrupt
-	ret			
-
-
-_printString:			; Procedure to print string on screen
-
-next_character:			
-	mov al, [si]		; Store byte in AL
-	inc si			; Increment SI
-	or al, al		; Check if end of string
-	jz exit_function 	; if end, return
-	call printCharacter 	; else print char
-	jmp next_character	; Get next char
-exit_function:
-	ret			
+		
 
 

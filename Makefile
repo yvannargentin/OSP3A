@@ -16,15 +16,16 @@ build :
 	
 	as86 ./kernel/util_asm.s -o ./object/util_asm.o
 	as86 ./kernel/interrupt.s -o ./object/interrupt.o
+	as86 ./kernel/disk_sector.s -o ./object/disk_sector.o
 
 rebuild : clean build
 
 disk.img :
-	ld86 $(LDFLAGS) -o kernel.img ./object/main.o ./object/kernel.o  ./object/util_asm.o ./object/interrupt.o ./object/syscall_handler.o ./object/io.o ./object/sector.o 
+	ld86 $(LDFLAGS) -o kernel.img ./object/main.o ./object/kernel.o  ./object/util_asm.o ./object/interrupt.o ./object/disk_sector.o ./object/syscall_handler.o ./object/io.o ./object/sector.o 
 	dd if=/dev/zero of=image.img bs=512 count=100 
 	dd conv=notrunc seek=0 if=./object/boot.bin of=image.img 
 	dd conv=notrunc seek=1 if=./kernel.img of=image.img 
-	dd conv=notrunc seek=10 if=./fichier.txt of=image.img
+	dd conv=notrunc seek=20 if=fichier.txt of=image.img
 
 qemu : image.img
 	qemu-system-i386 -hda image.img

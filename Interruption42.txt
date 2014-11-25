@@ -9,7 +9,7 @@ packet :
 	addr_segment 	db KERN_SEG
 	first_sect 		db KERN_START ; depuis ou on veut commencer à lire (index logique linéaire)
 
-	_read_sector_raw :
+_read_sector_raw :
 	push bp
 	mov bp, sp
 	

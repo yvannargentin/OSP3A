@@ -1,24 +1,49 @@
 extern int interrupt(int number, int ax, int bx, int cx, int dx, int di);
 extern void print_string(char *buf);
 
-#define f(x, y) 256 * x + y
 typedef unsigned char uchar;
+typedef unsigned int uint;
 
-void read_sector(int sector, uchar *buf){
-	int ax = f(0x02, 0x01);
-	int cx = f(0x00, sector);
-	int dx = f(0x00, 0x80);
+// structure contenant le packet
+typedef struct packet {
+	uchar size;
+	uchar reserved;
+	uint sect_count;
+	uint buf_offset;
+	uint buf_segment;
+	uint first_sect[4];
+} packet;
 
-	interrupt(0x13, ax , &buf, cx , dx, 0); // int 13, ah=02/al=1, ch=0/cl=sector
-	// on peut pas lire des secteurs de moins de 512 et pas plus grand que 512.
-	print_string(&ax);
+void read_sector(int sector_number, uchar *buf){
+
+	packet p;
+	p.size = 0x10;
+	p.reserved = 0;
+	p.sect_count = 1;
+	p.buf_offset = &buf;
+	//p.buf_segment => segment is set in the asm code
+	p.first_sect[0] = sector_number;
+	p.first_sect[1] = 0;
+	p.first_sect[2] = 0;
+	p.first_sect[3] = 0;
+
+	read_sector_raw(0x80, &p); // BOOT_DRIVE = 0x80
+	p.buf_offset =  p.buf_offset + '\0';
+	print_string(p.buf_offset);
 }
 
 
-void write_sector(int sector, uchar *buf) {
-	int ax = f(0x3, 1);
-	int cx = f(0x0, sector);
+void write_sector(int sector_number, uchar *buf) {
+	packet p;
+	p.size = 0x10;
+	p.reserved = 0;
+	p.sect_count = 1;
+	p.buf_offset = buf;
+	//p.buf_segment => segment is set in the asm code
+	p.first_sect[0] = sector_number;
+	p.first_sect[1] = 0;
+	p.first_sect[2] = 0;
+	p.first_sect[3] = 0;
 
-	interrupt(0x13, ax , buf, cx, 0, 0); // int 13, ah=03/al=1, ch=0/cl=sector
-	read_sector(sector, buf);
+	write_sector_raw(0x80, &p); // BOOT_DRIVE = 0x80
 }

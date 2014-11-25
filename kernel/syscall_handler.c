@@ -30,10 +30,12 @@ void syscall_handler(uint syscall_nb, uint arg1, uint arg2, uint arg3, uint arg4
 		break;
 
 		case 4 : 
+			//arg1 = sector number
+			//arg2 = buffer to hold read string
 			write_sector(arg1, arg2);
 		break;
 		
-		default : print_string("invalid use of interruption 0x80\0");
+		default : print_string("invalid use of interruption 0x80");
 		break;
 		
 
