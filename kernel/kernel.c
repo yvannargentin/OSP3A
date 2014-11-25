@@ -13,7 +13,7 @@ void kernel(void) {
 	interrupt(0x80,1,"coucou du kernel\0",0,0,0);
 	
 	interrupt(0x80,4,15,"hello ca va\n",0,0);// Ecrit secteur
-	//interrupt(0x80,3,20, buf,0,0); // lit le fichier dans le secteur 20
+	interrupt(0x80,3,20, buf,0,0); // lit le fichier dans le secteur 20
 	interrupt(0x80,3,15, buf1,0,0); // lit un secteur qu'on vient d'écrire
 
 	while(1){

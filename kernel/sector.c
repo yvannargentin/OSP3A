@@ -20,7 +20,7 @@ void read_sector(int sector_number, uchar *buf){
 	p.size = 0x10;
 	p.reserved = 0;
 	p.sect_count = 1;
-	p.buf_offset = &buf;
+	p.buf_offset = buf;
 	//p.buf_segment => segment is set in the asm code
 	p.first_sect[0] = sector_number;
 	p.first_sect[1] = 0;
@@ -28,7 +28,7 @@ void read_sector(int sector_number, uchar *buf){
 	p.first_sect[3] = 0;
 
 	read_sector_raw(0x80, &p); // BOOT_DRIVE = 0x80
-	p.buf_offset =  p.buf_offset + '\0';
+	//p.buf_offset =  p.buf_offset + '\0';
 	print_string(p.buf_offset);
 }
 
