@@ -28,6 +28,6 @@ SimpleFileSystem sfscreate (char *sfsName){
 int main(int argc, char **argv){
 	SimpleFileSystem sf = sfscreate("sfs");
 	sfsadd(sf, "test.txt");
-	sfsls(sf);
-	sfsdel(sf, "test.txt");
+	//sfsls(sf);
+	//sfsdel(sf, "test.txt");
 }
