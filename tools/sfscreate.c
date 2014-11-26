@@ -1,11 +1,7 @@
-#include <string.h>
 #include <stdio.h>
-#include <stdbool.h>
-#include "structure.h"
-
-extern void sfsadd(SimpleFileSystem sfs , char filename[32]);
-extern void sfsls(SimpleFileSystem sfs);
-extern void sfsdel(SimpleFileSystem sfs, char filename[32]);
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 SimpleFileSystem sfscreate (char *sfsName){
 	SimpleFileSystem sfs;
@@ -24,6 +20,7 @@ SimpleFileSystem sfscreate (char *sfsName){
 	}
 	return sfs;
 }
+<<<<<<< HEAD:tools/structure.c
 
 int main(int argc, char **argv){
 	SimpleFileSystem sf = sfscreate("sfs");
@@ -31,3 +28,5 @@ int main(int argc, char **argv){
 	//sfsls(sf);
 	//sfsdel(sf, "test.txt");
 }
+=======
+>>>>>>> 55368f7e0c40feebbb7d3434c089475d352736d0:tools/sfscreate.c
