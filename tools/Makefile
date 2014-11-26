@@ -12,4 +12,4 @@ build :
 	$(CC) $(CFLAGS) ./sfsls.c
 
 clean :
-	rm ./*.o
+	rm ./*.o structure
