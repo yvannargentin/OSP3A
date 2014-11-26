@@ -21,8 +21,9 @@ void sfsdel(SimpleFileSystem sfs, char file[32]) {
 	// Une fois qu'on a la bonne file entry, boucle sur les Index de blocs et modif du bits correspondant dans bitmap
 	int indexInd = 0;
 	while(entry.tabIndexes[indexInd] != 0) {
-		int indexBitmap = entry.tabIndexes[indexInd]/8;
-		sfs.bitmap[indexBitmap] &= ~(1<<8-entry.tabIndexes[indexInd]);
+		int indexBitmap = entry.tabIndexes[indexInd]/8; //Division entière
+		int decalage = entry.tabIndexes[indexInd]%8-1; //-1 parce qu'on decale à partir de la droite
+		sfs.bitmap[indexBitmap] &= ~(1<<decalage);
 		indexInd++;
 	}
 }
