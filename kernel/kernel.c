@@ -17,8 +17,8 @@ void kernel(void) {
 	interrupt(0x80,3,15, buf1,0,0); // lit un secteur qu'on vient d'écrire
 
 	while(1){
-		
 		interrupt(0x80,2,str,0,0,0); // read string
+		interrupt(0x80,1,str,0,0,0);
 		str = "";
 	} // évite d'aller lire plus loin
 }
