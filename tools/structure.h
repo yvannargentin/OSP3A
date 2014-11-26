@@ -29,7 +29,4 @@ typedef struct sfs {
 	char fileContent[256][1024];
 } SimpleFileSystem;
 
-SimpleFileSystem sfscreate (char *sfsName);
-
-
 #endif
