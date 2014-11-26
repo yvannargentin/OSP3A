@@ -16,15 +16,13 @@ SimpleFileSystem sfscreate (char *sfsName){
 	int i;
 	int tailleBitmap = sfs.sb.tailleBitmap*1024;
 	for(i=0; i<tailleBitmap; i++){
-		sfs.bitmap[i] = '1';
+		sfs.bitmap[i] = 0;
 	}
-		sfs.bitmap[32] = '0';
-		sfs.bitmap[42] = '0';
-		sfs.bitmap[52] = '0';
 	return sfs;
 }
 
 int main(int argc, char **argv){
 	SimpleFileSystem sf = sfscreate("sfs");
-	sfsadd(sf , "test.txt");
+	sfsadd(sf, "test.txt");
+	sfsdel(sf, "test.txt");
 }
