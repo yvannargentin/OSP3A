@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
+#include "structure.h"
 
 void sfsadd(SimpleFileSystem sfs , char filename[32]){
 	int i, j, r, h;
@@ -31,7 +33,7 @@ void sfsadd(SimpleFileSystem sfs , char filename[32]){
 					// recuperer taille fichier
 					sfs.fe[i].size = ftell(fp);
 					sfs.fe[i].tabIndexes[i] = i;
-					printf("%s ", sfs.fe[i].size);
+					printf("%d ", sfs.fe[i].size);
 					fileInit = true;
 				}
 				
