@@ -32,18 +32,18 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 					// initalisation du file entry avec le nom et la taille	
 					if (fileInit == false){
 						for (h=0; h< LENGTH; h++)
-							sfs->fe[i].name[h] = filename[h];
+							sfs->fe[index].name[h] = filename[h];
 					
 						// recuperer taille fichier
-						sfs->fe[i].size = FileSize(filename);
-						sfs->fe[i].tabIndexes[index] = index;
+						sfs->fe[index].size = FileSize(filename);
 						fileInit = true;
 					}
+					sfs->fe[index].tabIndexes[index] = index;
 				
 					
-					printf("%s ", sfs->fe[i].name);
-					printf("%d ", sfs->fe[i].size);
-					printf("%d ", sfs->fe[i].tabIndexes[i]);
+					printf("%s ", sfs->fe[index].name);
+					printf("%d ", sfs->fe[index].size);
+					printf("%d ", sfs->fe[index].tabIndexes[index]);
 					
 					fgets(contenu, TAILLE, fp); // recupere contenu fichier	
 					// ajoute le contenu du fichier par block dans le fileContent correspondant
