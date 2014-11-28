@@ -11,6 +11,7 @@ extern void sfsdel(SimpleFileSystem sfs, char filename[32]);
 int main(int argc, char **argv){
 	SimpleFileSystem sf = sfscreate("sfs");
 	sfsadd(&sf, "test.txt");
+	sfsadd(&sf, "fichier.txt");
 	sfsls(sf);
 	sfsdel(sf, "test.txt");
 }

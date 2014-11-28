@@ -9,7 +9,7 @@ void sfsls(SimpleFileSystem monSFS) {
 	bool continuer = true;
 	printf(" - Nom - Taille -\r\n");
 	while(continuer){
-		if(nbFiles >= monSFS.sb.tailleFE - 1  || monSFS.fe[nbFiles].size == 0)
+		if(nbFiles >= monSFS.sb.tailleFE - 1   || monSFS.fe[nbFiles].size == 0)
 			continuer = false;
 		if(continuer){
 			printf(" - %s - %d -\r\n",monSFS.fe[nbFiles].name,monSFS.fe[nbFiles].size);
