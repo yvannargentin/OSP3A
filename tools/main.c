@@ -14,4 +14,5 @@ int main(int argc, char **argv){
 	sfsadd(&sf, "fichier.txt\0");
 	sfsls(sf);
 	sfsdel(&sf, "test.txt");
+	sfsls(sf);
 }
