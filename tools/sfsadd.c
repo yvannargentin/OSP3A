@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include "structure.h"
 
-#define TAILLE 10
+#define TAILLE 20
 #define BLOCK 256
 #define LENGTH 32
 #define BIT 8
@@ -60,26 +60,27 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 						}
 						// recupere l'index dans lequel est pour ranger le contenu
 						sfs->fe[idFiles].tabIndexes[nbindex] = index;	
-						printf("TabIndexes[%d] = %d\n",nbindex , sfs->fe[idFiles].tabIndexes[nbindex]);
+						
+						// se positionne à l'endroit où le bout de contenu s'est arreter
+						if (nbindex > 0)
+							fseek(fp, ((TAILLE-1)*nbindex), 0);
+
 						fgets(contenu, TAILLE, fp); // recupere contenu fichier	
 
 						// ajoute le contenu du fichier par block dans le fileContent correspondant
 						for (r=0; r< TAILLE; r++){
 							//int id = (r*BIT)+j;
 							sfs->fileContent[index][r] = contenu[r];
-							printf("%c",sfs->fileContent[index][r]);
 							taille++;				
 						}
-				
+
 						// tant qu'on arrive pas à la fin du fichier
-						if(taille < sfs->fe[idFiles].size){
+						if(taille <= sfs->fe[idFiles].size){
 							// vide le tableau contenant le contenu
 							for (r=0; r< TAILLE; r++)
-								contenu[r] = '\0';
-							// se positionne à l'endroit où le bout de contenu s'est arreter
-							fseek(fp, TAILLE-1, 0);
-						
-							nbindex++;
+								contenu[r] = 0;
+							
+							nbindex++; // prochain tabindex
 						
 						}else{
 							fileInit = false;
@@ -91,7 +92,7 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 			}
 		}
 	}else{
-		printf("Impossible de stocker le fichier %s dans notre systeme de fichier car il est trop grand\n",filename);
+		printf("Impossible de stocker %s dans notre systeme de fichier car il est trop grand\n",filename);
 		return;	
 	}
 }
@@ -114,6 +115,7 @@ int FileSize(char filename[LENGTH]){
 	return taille;
 }
 
+// Verifie si la taille du fichier peut être stoquer dans le systeme
 bool LengthSupported(char filename[LENGTH]){
 	int size = FileSize(filename);
 	if (size > (MAX_INDEX * TAILLE))
