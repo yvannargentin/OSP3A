@@ -42,7 +42,7 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 						printf("impossible d'ouvrir le fichier\n");
 						return; 
 					}else{
-						int index = (1<<j);
+						int index = (i*BIT)+j+1;
 						sfs->bitmap[i] |= index; // bit block utilisé
 
 						// initalisation du file entry avec le nom et la taille	
@@ -59,6 +59,7 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 						}
 						// recupere l'index dans lequel est pour ranger le contenu
 						sfs->fe[idFiles].tabIndexes[nbindex] = index;	
+						//printf("TabIndexes[%d] = %d\n",nbindex , sfs->fe[idFiles].tabIndexes[nbindex]);
 						fgets(contenu, TAILLE, fp); // recupere contenu fichier	
 
 						// ajoute le contenu du fichier par block dans le fileContent correspondant
