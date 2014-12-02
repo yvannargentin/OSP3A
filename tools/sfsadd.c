@@ -9,7 +9,7 @@
 #define BIT 8
 
 void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
-	int i, j, r, h;
+	int i, j, r, h = 0;
 	
 	// lecture du fichier et recuperation du contenu
 	FILE *fp;
@@ -31,19 +31,22 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 					
 					// initalisation du file entry avec le nom et la taille	
 					if (fileInit == false){
-						for (h=0; h< LENGTH; h++)
+						// recupere le nom du fichier
+						while (filename[h] != '\0'){
 							sfs->fe[index].name[h] = filename[h];
-					
+							h++;
+						}
 						// recuperer taille fichier
 						sfs->fe[index].size = FileSize(filename);
 						fileInit = true;
 					}
+
+					// recupere l'index dans lequel est ranger le contenu
 					sfs->fe[index].tabIndexes[index] = index;
-				
 					
 					fgets(contenu, TAILLE, fp); // recupere contenu fichier	
+
 					// ajoute le contenu du fichier par block dans le fileContent correspondant
-						
 					for (r=0; r< TAILLE; r++){
 						int index = (r*BIT)+j;
 						sfs->fileContent[index][r] = contenu[r];				
@@ -57,7 +60,6 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 						// se positionne à l'endroit où le bout de contenu s'est arreter
 						fseek(fp, TAILLE, 0);
 					}else{
-						
 						fileInit = false;
 						return;
 					}
