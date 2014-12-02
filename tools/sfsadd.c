@@ -24,7 +24,8 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 		char contenu[TAILLE];
 		bool fileInit = false;
 		int nbindex = 0; // nombre de tabIndexes qu'on aura dans le file entry
-	
+		int taille = 0;	
+
 		// recupere l'id du fichier pour l'ajouter 
 		int idFiles = 0;
 		while (sfs->fe[idFiles].size != 0)
@@ -46,7 +47,7 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 						sfs->bitmap[i] |= index; // bit block utilisé
 
 						// initalisation du file entry avec le nom et la taille	
-						if ((fileInit == false) || (nbindex == 0) ){
+						if (fileInit == false){
 							// recupere le nom du fichier
 							while (filename[h] != '\0'){
 								sfs->fe[idFiles].name[h] = filename[h];
@@ -59,22 +60,24 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 						}
 						// recupere l'index dans lequel est pour ranger le contenu
 						sfs->fe[idFiles].tabIndexes[nbindex] = index;	
-						//printf("TabIndexes[%d] = %d\n",nbindex , sfs->fe[idFiles].tabIndexes[nbindex]);
+						printf("TabIndexes[%d] = %d\n",nbindex , sfs->fe[idFiles].tabIndexes[nbindex]);
 						fgets(contenu, TAILLE, fp); // recupere contenu fichier	
 
 						// ajoute le contenu du fichier par block dans le fileContent correspondant
 						for (r=0; r< TAILLE; r++){
 							//int id = (r*BIT)+j;
-							sfs->fileContent[index][r] = contenu[r];				
+							sfs->fileContent[index][r] = contenu[r];
+							printf("%c",sfs->fileContent[index][r]);
+							taille++;				
 						}
 				
 						// tant qu'on arrive pas à la fin du fichier
-						if(fgetc(fp) != EOF){
+						if(taille < sfs->fe[idFiles].size){
 							// vide le tableau contenant le contenu
 							for (r=0; r< TAILLE; r++)
 								contenu[r] = '\0';
 							// se positionne à l'endroit où le bout de contenu s'est arreter
-							fseek(fp, TAILLE, 0);
+							fseek(fp, TAILLE-1, 0);
 						
 							nbindex++;
 						
@@ -113,7 +116,7 @@ int FileSize(char filename[LENGTH]){
 
 bool LengthSupported(char filename[LENGTH]){
 	int size = FileSize(filename);
-	if ((size/MAX_INDEX) > BLOCK)
+	if (size > (MAX_INDEX * TAILLE))
 		return false;
 	return true;
 
