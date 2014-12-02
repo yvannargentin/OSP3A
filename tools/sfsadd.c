@@ -41,17 +41,12 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 					sfs->fe[index].tabIndexes[index] = index;
 				
 					
-					printf("%s ", sfs->fe[index].name);
-					printf("%d ", sfs->fe[index].size);
-					printf("%d ", sfs->fe[index].tabIndexes[index]);
-					
 					fgets(contenu, TAILLE, fp); // recupere contenu fichier	
 					// ajoute le contenu du fichier par block dans le fileContent correspondant
 						
 					for (r=0; r< TAILLE; r++){
 						int index = (r*BIT)+j;
-						sfs->fileContent[index][r] = contenu[r];
-						printf("%c", sfs->fileContent[index][r]);				
+						sfs->fileContent[index][r] = contenu[r];				
 					}
 				
 					// tant qu'on arrive pas à la fin du fichier
@@ -61,10 +56,8 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 							contenu[r] = '\0';
 						// se positionne à l'endroit où le bout de contenu s'est arreter
 						fseek(fp, TAILLE, 0);
-						printf("\n"); 
 					}else{
 						
-						printf("\n");	
 						fileInit = false;
 						return;
 					}
