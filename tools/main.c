@@ -16,20 +16,20 @@ void sfsimg (SimpleFileSystem sfs){
 	//Remplir le reste du block avec des 0	
 	int i;
 	char j = 0;
-	int borne = 1024-18;	
+	int borne = 1024-18;	
 	for(i=0;i<borne;i++) {
 		write(file, &j, 1);
 	}
 	write(file, &sfs.bitmap, 1024);
 
-	int nbFE = 0;
+	int nbFE = 0;
 	int id = 0;
 	//Recuperation du nombre de FE
-	while (sfs->fe[id].size != 0)
-		nbFe++;
+	while (sfs.fe[id].size != 0)
+		nbFE++;
 	write(file, &sfs.fe, 256*nbFE);
 	//Remplir le reste du block avec des 0
-	borne = (1024*16)-(256*nbPE);
+	borne = (1024*16)-(256*nbFE);
 	for(i=0;i<borne;i++) {
 		write(file, &j, 1);
 	}

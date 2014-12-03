@@ -11,4 +11,5 @@ build :
 	$(CC) $(CFLAGS) ./sfscreate.c
 
 clean :
-	rm ./*.o structure
+	rm ./*.o structure ./*~
+	

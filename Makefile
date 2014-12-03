@@ -25,7 +25,7 @@ disk.img :
 	dd if=/dev/zero of=image.img bs=512 count=100 
 	dd conv=notrunc seek=0 if=./object/boot.bin of=image.img 
 	dd conv=notrunc seek=1 if=./kernel.img of=image.img 
-	dd conv=notrunc seek=20 if=fichier.txt of=image.img
+	dd conv=notrunc seek=2 if=./tools/fs.img of=image.img
 
 qemu : image.img
 	qemu-system-i386 -hda image.img
