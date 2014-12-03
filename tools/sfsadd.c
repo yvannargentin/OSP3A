@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include "structure.h"
 
-#define TAILLE 20
+#define TAILLE 1024
 #define BLOCK 256
 #define LENGTH 32
 #define BIT 8
