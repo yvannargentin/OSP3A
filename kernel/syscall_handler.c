@@ -19,7 +19,7 @@ void syscall_handler(uint syscall_nb, uint arg1, uint arg2, uint arg3, uint arg4
 	// 6 : int get_stat(char *filename, struct stat_st *stat);
 	// 7 : int read_file(char *filename, unsigned char *buf);
 	// 8 : int remove_file(char *filename);
-
+ 
 	switch(syscall_nb) {
 
 		case 1 :
