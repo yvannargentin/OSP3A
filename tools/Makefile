@@ -2,7 +2,6 @@ CC=gcc
 CFLAGS=-c
 
 all: build
-
 	$(CC) -o structure ./main.c ./sfscreate.o ./sfsadd.o ./sfsdel.o ./sfsls.o
 
 build :
