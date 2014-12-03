@@ -64,7 +64,7 @@ void syscall_handler(uint syscall_nb, uint arg1, uint arg2, uint arg3, uint arg4
 
 		case 8 : 
 			// arg1 = char *filename
-			remove_file(arg1)
+			remove_file(arg1);
 		break;
 		
 		default : print_string("invalid use of interruption 0x80");
