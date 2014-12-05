@@ -2,13 +2,13 @@
 #define read_str 2
 #define read_sect 3
 #define write_sect 4
-#define iterator 5
-#define get_stat 6
-#define read_file 7
-#define remove_file 8
-#define debutSuperBlock 20
-#define debutBitmap 22
+#define iter 5
+#define get_st 6
+#define read_f 7
+#define remove_f 8
+#define debutSB 20
+#define debutBtm 22
 #define debutFe 24
-#define debutFileContent (debutFe + 32)
-#define tailleFileEntry 256
+#define debutFC (debutFe + 32)
+#define tailleFE 256
 

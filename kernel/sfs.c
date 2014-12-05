@@ -1,18 +1,16 @@
-int interrupt(int number, int ax, int bx, int cx, int dx, int di);
+extern int interrupt(int number, int ax, int bx, int cx, int dx, int di);
 #include "nomenclature.h"
 
 typedef unsigned char uchar;
 
-// le sfs est écris au secteur 20 le Superblock prend 2 secteur
-// le bitmap prends 2 secteurs donc on commence le FileEntrie à 24
 
+int floor(int val,int diviseur);
 
 void iterator(int compteur) {
+	// divise par 2
 	int decalage = floor(compteur, 2);
 	
-	
-
-	uchar buf[tailleFileEntry]; 
+	uchar buf[tailleFE*2];  // *2 car 1 FE = 1/2 secteur
 	interrupt(0x80,read_sect,debutFe + decalage, buf,0,0);
 	
 }
@@ -25,6 +23,7 @@ int read_file(char *filename, unsigned char *buf) {
 
 int remove_file(char *filename) {
 }
+
 int floor(int val,int diviseur){
 	int resultat = 0;
 	while(val % diviseur != 0)
