@@ -6,9 +6,9 @@
 #define get_st 6
 #define read_f 7
 #define remove_f 8
-#define debutSB 20
-#define debutBtm 22
-#define debutFe 24
-#define debutFC (debutFe + 32)
-#define tailleFE 256
-#define tailleBlock 512
+#define SBStart 20
+#define BtmStart 22
+#define FeStart 24
+#define FCStart (FeStart + 32)
+#define FESize 256
+#define BlockSize 512

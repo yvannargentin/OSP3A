@@ -6,8 +6,8 @@
 typedef unsigned char uchar;
 	char *str;
 void kernel(void) {
-	uchar buf[tailleBlock];
-	uchar buf1[tailleBlock];
+	uchar buf[BlockSize];
+	uchar buf1[BlockSize];
 	char *str;
 	init_syscalls(); 		// ecrase interruption 80 pour la notre
 	interrupt(0x80,print_str,"coucou du kernel\0",0,0,0);
@@ -18,7 +18,7 @@ void kernel(void) {
 	interrupt(0x80,iter,20,buf,0,0); // itère sur secteur 20
 	while(1){
 		interrupt(0x80, read_str,str,0,0,0); // read string
-		interrupt(0x80,1,str,0,0,0);
+		interrupt(0x80,print_str,str,0,0,0);
 		str = "";
 	} // évite d'aller lire plus loin
 }
