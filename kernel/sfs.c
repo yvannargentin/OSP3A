@@ -10,7 +10,7 @@ void iterator(int compteur) {
 	// divise par 2
 	int decalage = floor(compteur, 2);
 	
-	uchar buf[tailleFE*2];  // *2 car 1 FE = 1/2 secteur
+	uchar buf[tailleBlock];  // *2 car 1 FE = 1/2 secteur
 	interrupt(0x80,read_sect,debutFe + decalage, buf,0,0);
 	
 }

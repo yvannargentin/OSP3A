@@ -11,4 +11,4 @@
 #define debutFe 24
 #define debutFC (debutFe + 32)
 #define tailleFE 256
-
+#define tailleBlock 512

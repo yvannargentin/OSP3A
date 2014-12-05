@@ -6,8 +6,8 @@
 typedef unsigned char uchar;
 	char *str;
 void kernel(void) {
-	uchar buf[512];
-	uchar buf1[512];
+	uchar buf[tailleBlock];
+	uchar buf1[tailleBlock];
 	char *str;
 	init_syscalls(); 		// ecrase interruption 80 pour la notre
 	interrupt(0x80,print_str,"coucou du kernel\0",0,0,0);
