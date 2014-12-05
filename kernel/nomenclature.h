@@ -6,4 +6,9 @@
 #define get_stat 6
 #define read_file 7
 #define remove_file 8
+#define debutSuperBlock 20
+#define debutBitmap 22
+#define debutFe 24
+#define debutFileContent (debutFe + 32)
+#define tailleFileEntry 256
 
