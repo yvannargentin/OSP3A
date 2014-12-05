@@ -6,7 +6,7 @@ LDFLAGS=-M -m -d -s
 all : clean build disk.img qemu
 
 build :
-	nasm ./boot/bootloader.asm -f bin -o ./object/boot.bin
+	nasm ./boot/bootloader.s -f bin -o ./object/boot.bin
 
 	$(CC) $(CFLAGS) -c ./kernel/main.c -o ./object/main.o
 	$(CC) $(CFLAGS) -c ./kernel/kernel.c -o ./object/kernel.o
