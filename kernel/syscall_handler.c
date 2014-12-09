@@ -36,13 +36,13 @@ void syscall_handler(uint syscall_nb, uint arg1, uint arg2, uint arg3, uint arg4
 		case 3 :
 			//arg1 = sector number
 			//arg2 = buffer to hold read string
-			read_sector(arg1, arg2);
+			sector(arg1, arg2, 0x42);
 		break;
 
 		case 4 : 
 			//arg1 = sector number
 			//arg2 = buffer to hold read string
-			write_sector(arg1, arg2);
+			sector(arg1, arg2, 0x43);
 		break;
 
 		case 5 : 

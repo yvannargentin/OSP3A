@@ -14,7 +14,7 @@ typedef struct packet {
 	uint first_sect[4];
 } packet;
 
-void read_sector(int sector_number, uchar *buf){
+void sector(int sector_number, uchar *buf, int interruption){
 
 	packet p;
 	p.size = 0x10;
@@ -27,12 +27,12 @@ void read_sector(int sector_number, uchar *buf){
 	p.first_sect[2] = 0;
 	p.first_sect[3] = 0;
 
-	read_sector_raw(0x80, &p); // BOOT_DRIVE = 0x80
+	sector_raw(interruption, 0x80, &p); // BOOT_DRIVE = 0x80
 	//p.buf_offset =  p.buf_offset + '\0';
 	print_string(p.buf_offset);
 }
 
-
+/*
 void write_sector(int sector_number, uchar *buf) {
 	packet p;
 	p.size = 0x10;
@@ -46,4 +46,4 @@ void write_sector(int sector_number, uchar *buf) {
 	p.first_sect[3] = 0;
 
 	write_sector_raw(0x80, &p); // BOOT_DRIVE = 0x80
-}
+}*/
