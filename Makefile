@@ -6,6 +6,7 @@ LDFLAGS=-M -m -d -s
 all : clean build disk.img qemu
 
 build :
+	make -C tools
 	nasm ./boot/bootloader.s -f bin -o ./object/boot.bin
 
 	$(CC) $(CFLAGS) -c ./kernel/main.c -o ./object/main.o
@@ -27,6 +28,8 @@ disk.img :
 	dd conv=notrunc seek=0 if=./object/boot.bin of=image.img 
 	dd conv=notrunc seek=1 if=./kernel.img of=image.img 
 	dd conv=notrunc seek=20 if=./tools/fs.img of=image.img
+
+
 
 qemu : image.img
 	qemu-system-i386 -hda image.img

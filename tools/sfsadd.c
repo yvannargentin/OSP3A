@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include "structure.h"
 
-#define TAILLE 1024
+#define TAILLE 10
 #define BLOCK 256
 #define LENGTH 32
 #define BIT 8
@@ -38,14 +38,17 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 
 				if (nbindex > MAX_INDEX)
 					break;
-
-				if ((sfs->bitmap[i]&(1<<j)) == 0){ // si bit block libre
+				printf("j %d bitmap %d ", (1<<j), sfs->bitmap[i]);
+				int bit = (sfs->bitmap[i]&(1<<j));
+			
+				//printf("%d : ", bit);
+				if (bit == 0){ // si bit block libre
 					if (fp == NULL){
 						printf("impossible d'ouvrir le fichier\n");
 						return; 
 					}else{
-						int index = (i*BIT)+j+1;
-						sfs->bitmap[i] |= index; // bit block utilisé
+						sfs->bitmap[i] &= (1<<j) ; // bit block utilisé
+						printf("bitmap pris %d \n", sfs->bitmap[i]);
 
 						// initalisation du file entry avec le nom et la taille	
 						if (fileInit == false){
@@ -59,9 +62,12 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 							fileInit = true;
 						
 						}
-						// recupere l'index dans lequel est pour ranger le contenu
+						// recupere l'index dans lequel est pour ranger le contenu (filecontent)
+						int index = (i*BIT)+j+1;
 						sfs->fe[idFiles].tabIndexes[nbindex] = index;	
-					
+						printf("filecontent pris %d \n", index);
+						//printf("%d %d %s\n ", index, i, filename);
+
 						// se positionne à l'endroit où le bout de contenu s'est arreter
 						if (nbindex > 0)
 							fseek(fp, ((TAILLE-1)*nbindex), 0);
@@ -70,7 +76,6 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 
 						// ajoute le contenu du fichier par block dans le fileContent correspondant
 						for (r=0; r< TAILLE; r++){
-							//int id = (r*BIT)+j;
 							sfs->fileContent[index][r] = contenu[r];
 							taille++;				
 						}
