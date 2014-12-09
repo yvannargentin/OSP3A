@@ -19,7 +19,6 @@ int remove_file(char *filename) {
 	int indexF;
 
 	do {
-		
 		interrupt(0x80,read_sect,noSector, buf,0,0);
 		// interrupt(0x80,print_str,buf,0,0,0); 
 
@@ -34,6 +33,9 @@ int remove_file(char *filename) {
 		compteur++; 
 		
 	} while (strcomp(&buf[offset],filename) != 0 || compteur > 64);
+	
+	if(compteur > 64)
+		return -1;	// File not found
 
 	interrupt(0x80,print_str,buf,0,0,0); 
 
@@ -47,7 +49,8 @@ int remove_file(char *filename) {
 
 
 	indexFile = offset+34;
-	indexF = &buf[indexFile] - 0;
+	// Getting int value from file index
+	indexF = /*Magic code*/0;
 
 	// Iterate on fileIndexes
 	while (indexF != 0) {
@@ -65,8 +68,13 @@ int remove_file(char *filename) {
 	}
 
 	// Saving bitmap to image
-	/*interrupt(0x80, write_sect, BtmStart, map, 0, 0);
+	interrupt(0x80, write_sect, BtmStart, map, 0, 0);
+	interrupt(0x80,print_str,"Bitmap saved",0,0,0); 
 	// Saving file entry sector
-	interrupt(0x80, write_sect,noSector, buf, 0, 0); */
+	interrupt(0x80, write_sect,noSector, buf, 0, 0); 
+	interrupt(0x80,print_str,"File entry saved",0,0,0); 
+	interrupt(0x80,print_str,"End remove",0,0,0); 
+
+	return 0;
 }
 
