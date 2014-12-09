@@ -9,6 +9,8 @@
 #define SBStart 20
 #define BtmStart 22
 #define FeStart 24
-#define FCStart (FeStart + 32)
+#define FCStart (FeStart + 33)
 #define FESize 256
 #define BlockSize 512
+#define TabIndexesStart 34
+#define MaxFe 64
