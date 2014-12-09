@@ -58,7 +58,7 @@ int remove_file(char *filename) {
 		// Retreives the int value of file index
 		tmp = buf[indexFile++];
 		tmp2 = buf[indexFile++];
-		indexF = tmp+tmp2<<8;
+		indexF = tmp+(tmp2<<8);
 
 		interrupt(0x80,print_str,"Iterating...",0,0,0); 
 
@@ -66,6 +66,7 @@ int remove_file(char *filename) {
 		indexBitmap = indexF/8;
 		decalage = indexF%8-1;
 		// Put the bit to 0
+		interrupt(0x80,print_str,&map[indexBitmap],0,0,0); 
 		map[indexBitmap] &= ~(1<<decalage);
 	} while(indexF != 0);
 
