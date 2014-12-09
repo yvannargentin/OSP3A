@@ -17,12 +17,6 @@ int iterator(int counter, char *buf) {
 int get_stat(char *filename, struct stat_st *stat) {
 }
 
-int read_file(char *filename, unsigned char *buf) {
-}
-
-int remove_file(char *filename) {
-}
-
 int divfloor(int val,int divisor){
 	int result = 0;/*
 	while(modulo(val, divisor) != 0)
@@ -32,4 +26,13 @@ int divfloor(int val,int divisor){
 	
 	return result;
 }
+
+
+int strcomp(const char *s1, const char *s2) {
+    for ( ; *s1 == *s2; s1++, s2++)
+	if (*s1 == '\0')
+	    return 0;
+    return ((*(unsigned char *)s1 < *(unsigned char *)s2) ? -1 : +1);
+}
+
 

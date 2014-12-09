@@ -1,4 +1,6 @@
 #include "nomenclature.h"
+extern int strcomp(const char *s1, const char *s2);
+extern int interrupt(int number, int ax, int bx, int cx, int dx, int di);
 
 int read_file(char *filename, unsigned char *buf){
 	int nb_sector_fe;
@@ -7,12 +9,18 @@ int read_file(char *filename, unsigned char *buf){
 
 	// recuperer le secteur et l'offset du fe correponsdant
 	do {
-		if (iteratorInterne(nb_sector_fe, offset) == null)
-			return -1;
-		else{
-			iteratorInterne(nb_sector_fe, offset);
-			interrupt(0x80,read_sect,nb_sector_fe, sect,0,0); // lit un secteur qu'on vient d'écrire 
-		}	
+		
+		if((compteur%2) == 1)
+			noSector++;
+		if(offset == 0)
+			offset = 256;
+		else
+			offset = 0;
+
+		compteur++;
+
+		interrupt(0x80,read_sect,nb_sector_fe, sect,0,0); // lit un secteur qu'on vient d'écrire 
+		
 	} while (strcomp(sect[offset]), filename);
 
 	int debutTabIndexes = 34;
