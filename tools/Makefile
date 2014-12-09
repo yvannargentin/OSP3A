@@ -17,5 +17,5 @@ run: all
 	./structure
 
 clean :
-	rm ./*.o structure ./*~
+	rm -rf *.o structure 
 	
