@@ -15,7 +15,7 @@ int read_file(char *filename, unsigned char *buf){
 		
 		interrupt(0x80,read_sect,nb_sector_fe, sect,0,0); // lit un secteur qu'on vient d'écrire 
 		
-		if((compteur%2) == 1)
+		if(modulo(compteur,2) == 1)
 			nb_sector_fe++;
 		if(offset == 0)
 			offset = BlockSize/2;

@@ -1,5 +1,6 @@
-extern int interrupt(int number, int ax, int bx, int cx, int dx, int di);
 #include "nomenclature.h"
+
+extern int interrupt(int number, int ax, int bx, int cx, int dx, int di);
 
 typedef unsigned char uchar;
 

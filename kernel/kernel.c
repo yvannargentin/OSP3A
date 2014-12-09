@@ -5,6 +5,7 @@
 
 typedef unsigned char uchar;
 	char *str;
+
 void kernel(void) {
 	uchar buf[BlockSize];
 	uchar buf1[BlockSize];

@@ -1,5 +1,6 @@
 ;util_asm.s
 .global _init_syscalls
+.global _modulo
 .global _syscall_handler
 .extern _syscall_handler
 ; interrupt 0x80 vector (80 * 4 = 320)
