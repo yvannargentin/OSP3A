@@ -4,13 +4,17 @@ extern int modulo(int a, int b);
 #include "nomenclature.h"
 typedef unsigned char uchar;
 
+
+/* remove_file.c
+ * Removes a file which name's given in parameter
+ */
 int remove_file(char *filename) {
 	
 	// Iterate on fileEntries
 	uchar buf[BlockSize];
 	int noSector = FeStart;	// Sector number containing fe (24 for the first one)
 	int offset = 0;		// offset of fe in sector (0 or 256)
-	int compteur = 0;
+	int counter = 0;
 	unsigned char map[BlockSize];
 	int debutIndexes = 34;
 	int indexFile;
@@ -20,26 +24,23 @@ int remove_file(char *filename) {
 	int tmp;
 	int tmp2;
 
+	// Find 
 	do {
 		interrupt(0x80,read_sect,noSector, buf,0,0);
-		// interrupt(0x80,print_str,buf,0,0,0); 
-
-		if((compteur%2) == 1)
+		// Inc counter each 2 fe (one sector contains 2 fe)
+		if((counter%2) == 1)
 			noSector++;
-		
+		// Offset is 0 or 256 (BlockSize/2). fe is either at the begining of the sector or just at the middle (2fe for each sectors)
 		if(offset == 0)
 			offset = BlockSize/2;
 		else
 			offset = 0;
-
-		compteur++; 
+		counter++; 
 		
-	} while (strcomp(&buf[offset],filename) != 0 || compteur > 64);
+	} while (strcomp(&buf[offset],filename) != 0 || counter > 64);
 	
-	if(compteur > 64)
+	if(counter > 64)
 		return -1;	// File not found
-
-	interrupt(0x80,print_str,buf,0,0,0); 
 
 	// byte 0 of name = 0
 	buf[offset] = 0;
@@ -49,32 +50,24 @@ int remove_file(char *filename) {
 	interrupt(0x80, read_sect, BtmStart, map, 0, 0);
 	interrupt(0x80,print_str,"Loading bitmap from sect 22",0,0,0); 
 
-
-	indexFile = offset+34;
-	// Getting int value from file index
-
-	tmp = buf[indexFile];
-	tmp2 = buf[++indexFile];
-	indexF = tmp+tmp2<<8;
+	// Get the offset of the first file index
+	indexFile = offset+debutIndexes;
 
 	// Iterate on fileIndexes
-	while (indexF != 0) {
-		
-		
-		interrupt(0x80,print_str,"Iterating...",0,0,0); 
-		interrupt(0x80,print_str,&buf[indexFile],0,0,0); 
-
-		indexBitmap = buf[indexFile]/8;
-		decalage = indexF%8-1;
-
-		map[indexBitmap] &= ~(1<<decalage);
-		// indexFile += 2;
-		tmp = buf[++indexFile];
-		tmp2 = buf[++indexFile];
-
+	do {
+		// Retreives the int value of file index
+		tmp = buf[indexFile++];
+		tmp2 = buf[indexFile++];
 		indexF = tmp+tmp2<<8;
-		
-	}
+
+		interrupt(0x80,print_str,"Iterating...",0,0,0); 
+
+		// Find the bit to change in the bitmap
+		indexBitmap = indexF/8;
+		decalage = indexF%8-1;
+		// Put the bit to 0
+		map[indexBitmap] &= ~(1<<decalage);
+	} while(indexF != 0);
 
 	// Saving bitmap to image
 	interrupt(0x80, write_sect, BtmStart, map, 0, 0);
@@ -82,8 +75,6 @@ int remove_file(char *filename) {
 	// Saving file entry sector
 	interrupt(0x80, write_sect, noSector-1, buf, 0, 0); 
 	interrupt(0x80,print_str,"File entry saved",0,0,0);
- 
-	interrupt(0x80,print_str,"End remove",0,0,0); 
 
 	return 0;
 }
