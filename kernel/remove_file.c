@@ -53,28 +53,31 @@ int remove_file(char *filename) {
 	indexFile = offset+34;
 	// Getting int value from file index
 
-	tmp = buf[indexFile];
+	/* tmp = buf[indexFile];
 	tmp2 = buf[++indexFile];
-	indexF = tmp+tmp2<<8;
+	indexF = tmp+tmp2<<8; */
 
 	// Iterate on fileIndexes
-	while (indexF != 0) {
-		
-		
-		interrupt(0x80,print_str,"Iterating...",0,0,0); 
-		interrupt(0x80,print_str,&buf[indexFile],0,0,0); 
+	do {
 
-		indexBitmap = buf[indexFile]/8;
+		tmp = buf[indexFile++];
+		tmp2 = buf[indexFile++];
+		indexF = tmp+tmp2<<8;
+
+		interrupt(0x80,print_str,"Iterating...",0,0,0); 
+		// interrupt(0x80,print_str,&buf[indexFile],0,0,0); 
+
+		indexBitmap = indexF/8;
 		decalage = indexF%8-1;
 
 		map[indexBitmap] &= ~(1<<decalage);
-		// indexFile += 2;
-		tmp = buf[++indexFile];
+
+		/* tmp = buf[++indexFile];
 		tmp2 = buf[++indexFile];
 
-		indexF = tmp+tmp2<<8;
+		indexF = tmp+tmp2<<8; */
 		
-	}
+	} while(indexF != 0);
 
 	// Saving bitmap to image
 	interrupt(0x80, write_sect, BtmStart, map, 0, 0);
