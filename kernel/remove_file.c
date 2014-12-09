@@ -71,7 +71,7 @@ int remove_file(char *filename) {
 	interrupt(0x80, write_sect, BtmStart, map, 0, 0);
 	interrupt(0x80,print_str,"Bitmap saved",0,0,0); 
 	// Saving file entry sector
-	interrupt(0x80, write_sect,noSector, buf, 0, 0); 
+	interrupt(0x80, write_sect, noSector, buf, 0, 0); 
 	interrupt(0x80,print_str,"File entry saved",0,0,0); 
 	interrupt(0x80,print_str,"End remove",0,0,0); 
 
