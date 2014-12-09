@@ -17,6 +17,8 @@ int remove_file(char *filename) {
 	int indexBitmap;
 	int decalage;
 	int indexF;
+	int tmp;
+	int tmp2;
 
 	do {
 		interrupt(0x80,read_sect,noSector, buf,0,0);
@@ -50,11 +52,15 @@ int remove_file(char *filename) {
 
 	indexFile = offset+34;
 	// Getting int value from file index
-	indexF = /*Magic code*/0;
+
+	tmp = buf[indexFile];
+	tmp2 = buf[++indexFile];
+	indexF = tmp+tmp2<<8;
 
 	// Iterate on fileIndexes
 	while (indexF != 0) {
-		indexF = &buf[indexFile] - 0;
+		
+		
 		interrupt(0x80,print_str,"Iterating...",0,0,0); 
 		interrupt(0x80,print_str,&buf[indexFile],0,0,0); 
 
@@ -62,17 +68,21 @@ int remove_file(char *filename) {
 		decalage = indexF%8-1;
 
 		map[indexBitmap] &= ~(1<<decalage);
-		indexFile += 2;
+		// indexFile += 2;
+		tmp = buf[++indexFile];
+		tmp2 = buf[++indexFile];
 
+		indexF = tmp+tmp2<<8;
 		
 	}
 
 	// Saving bitmap to image
 	interrupt(0x80, write_sect, BtmStart, map, 0, 0);
-	interrupt(0x80,print_str,"Bitmap saved",0,0,0); 
+	interrupt(0x80,print_str,"Bitmap saved",0,0,0);  
 	// Saving file entry sector
-	interrupt(0x80, write_sect, noSector, buf, 0, 0); 
-	interrupt(0x80,print_str,"File entry saved",0,0,0); 
+	interrupt(0x80, write_sect, noSector-1, buf, 0, 0); 
+	interrupt(0x80,print_str,"File entry saved",0,0,0);
+ 
 	interrupt(0x80,print_str,"End remove",0,0,0); 
 
 	return 0;
