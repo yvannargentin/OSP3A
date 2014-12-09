@@ -6,12 +6,13 @@ int read_file(char *filename, unsigned char *buf){
 	int nb_sector_fe;
 	int offset;
 	unsigned char sect[512];
+	int compteur = 0;
 
 	// recuperer le secteur et l'offset du fe correponsdant
 	do {
 		
 		if((compteur%2) == 1)
-			noSector++;
+			nb_sector_fe++;
 		if(offset == 0)
 			offset = 256;
 		else
