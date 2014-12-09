@@ -6,7 +6,7 @@ LDFLAGS=-M -m -d -s
 all : clean build disk.img qemu
 
 build :
-	make -C tools
+	make run -C tools
 	nasm ./boot/bootloader.s -f bin -o ./object/boot.bin
 
 	$(CC) $(CFLAGS) -c ./kernel/main.c -o ./object/main.o
