@@ -6,8 +6,8 @@ typedef unsigned char uchar;
 int remove_file(char *filename) {
 	
 	// Iterate on fileEntries
-	uchar buf[512];
-	int noSector = 24;	// Sector number containing fe (24 for the first one)
+	uchar buf[BlockSize];
+	int noSector = FeStart;	// Sector number containing fe (24 for the first one)
 	int offset = 0;		// offset of fe in sector (0 or 256)
 	int compteur = 0;
 
@@ -17,7 +17,7 @@ int remove_file(char *filename) {
 		if((compteur%2) == 1)
 			noSector++;
 		if(offset == 0)
-			offset = 256;
+			offset = FESize;
 		else
 			offset = 0;
 
@@ -28,8 +28,8 @@ int remove_file(char *filename) {
 	buf[offset] = 0;
 
 	// Load bitmap
-	uchar map[512];
-	interrupt(0x80, read_sect, 22, map, 0, 0);
+	uchar map[BlockSize];
+	interrupt(0x80, read_sect, BtmStart, map, 0, 0);
 
 
 	int indexFile = offset+34;
@@ -44,7 +44,7 @@ int remove_file(char *filename) {
 	}
 
 	// Saving bitmap to image
-	interrupt(0x80, write_sect, 22, map, 0, 0);
+	interrupt(0x80, write_sect, BtmStart, map, 0, 0);
 	// Saving file entry sector
 	interrupt(0x80, write_sect, noSect, buf, 0, 0);
 }
