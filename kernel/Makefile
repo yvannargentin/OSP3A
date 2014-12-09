@@ -12,6 +12,8 @@ build :
 	$(CC) $(CFLAGS) -c sfs.c -o ../object/sfs.o
 	$(CC) $(CFLAGS) -c sector.c -o ../object/sector.o
 	$(CC) $(CFLAGS) -c syscall_handler.c -o ../object/syscall_handler.o
+	$(CC) $(CFLAGS) -c remove_file.c -o ../object/remove_file.o
+		
 	
 	as86 util_asm.s -o ../object/util_asm.o
 	as86 interrupt.s -o ../object/interrupt.o

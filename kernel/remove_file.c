@@ -1,37 +1,53 @@
 
+typedef unsigned char uchar;
 
 int remove_file(char *filename) {
 	
-	// Iterate on files with iterator
+	// Iterate on fileEntries
+	uchar buf[512];
+	int noSector = 24;	// Sector number containing fe (24 for the first one)
+	int offset = 0;		// offset of fe in sector (0 or 256)
+	int compteur = 0;
 
-	FileEntry *entry;
-	do {
-		entry = iterator.next();	// When found get the corresponding file entry
-	} while(strcomp(entry->name, filename) != 0);
+	do {		
+		interrupt(0x80, read_sect, noSector, buf, 0, 0);
 
-	// Put 0 at the first byte of name
-	entry->name[0] = 0;
+		if((compteur%2) == 1)
+			noSector++;
+		if(offset == 0)
+			offset = 256;
+		else
+			offset = 0;
 
-	// Go through file indexes, put 0 at corresponding bit in bitmap
-	int indexInd = 0;
+		compteur++;
+	} while(strcomp(buf[offset], filename));
 
-	// Load bitmap
-	// TO DO
-	
-	
-	while(entry->tabIndexes[indexInd] != 0) {
+	// byte 0 of name = 0
+	buf[offset] = 0;
 
-		int indexBitmap = entry->tabIndexes[indexInd]/8; //Division entière
-		int decalage = entry->tabIndexes[indexInd]%8-1;	 //-1 parce qu'on decale à partir de la droite
-		sfs->bitmap[indexBitmap] &= ~(1<<decalage);
-	
-		indexInd++;
-	} 
+	// Load bitmap
+	uchar map[512];
+	interrupt(0x80, read_sect, 22, map, 0, 0);
 
+
+	int indexFile = offset+34;
+
+	// Iterate on fileIndexes
+	while (buf[indexFile] != 0) {
+		int indexBitmap = buf[indexFile]/8;
+		int decalage = buf[indexFile]%8-1;
+
+		map[indexBitmap] &= ~(1<<decalage);
+		indexFile += 2;
+	}
+
+	// Saving bitmap to image
+	interrupt(0x80, write_sect, 22, map, 0, 0);
+	// Saving file entry sector
+	interrupt(0x80, write_sect, noSect, buf, 0, 0);
 }
 
-int strcomp(const char *s1, const char *s2)
-{
+int strcomp(const char *s1, const char *s2) {
     for ( ; *s1 == *s2; s1++, s2++)
 	if (*s1 == '\0')
 	    return 0;
