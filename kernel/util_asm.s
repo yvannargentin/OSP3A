@@ -28,7 +28,14 @@ _init_syscalls:
 	ret
 
 
-
+_modulo:
+	push bx
+	push ax
+	mov dx, 0     
+	div bx  ; Divides 1234 by 10. DX = 4 and AX = 123
+	mov ax, dx
+	ret
+	
 
 ; Stub routine called when an interrupt 0x80 occurs.
 ; This stub calls the syscall_handler function defined in the C code.
