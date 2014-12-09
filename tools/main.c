@@ -45,7 +45,7 @@ int main(int argc, char **argv){
 	sfsadd(&sf, "test.txt\0");
 	sfsadd(&sf, "fichier.txt\0");
 	sfsls(sf);
-	sfsdel(&sf, "fichier.txt");
+	sfsdel(&sf, "test.txt");
 	sfsls(sf);
 	sfsimg(sf);
 }

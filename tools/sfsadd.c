@@ -1,3 +1,4 @@
+
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -60,7 +61,7 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH]){
 						}
 						// recupere l'index dans lequel est pour ranger le contenu
 						sfs->fe[idFiles].tabIndexes[nbindex] = index;	
-						
+					
 						// se positionne à l'endroit où le bout de contenu s'est arreter
 						if (nbindex > 0)
 							fseek(fp, ((TAILLE-1)*nbindex), 0);
