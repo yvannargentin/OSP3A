@@ -7,16 +7,20 @@ typedef unsigned char uchar;
 	char *str;
 
 void kernel(void) {
-	uchar buf[BlockSize];
+	//uchar buf[BlockSize];
 	uchar buf1[BlockSize];
+	char *buf;
 	char *str;
+	int i = 0;
 	init_syscalls(); 		// ecrase interruption 80 pour la notre
-	interrupt(0x80,print_str,"coucou du kernel\0",0,0,0);
-	
-	interrupt(0x80,write_sect,15,"hello ca va\n",0,0);// Ecrit secteur
-	//interrupt(0x80,3,20, buf,0,0); // lit le fichier dans le secteur 20
-	//interrupt(0x80,3,15, buf1,0,0); // lit un secteur qu'on vient d'écrire
-	interrupt(0x80,iter,20,buf,0,0); // itère sur secteur 20
+	interrupt(0x80,print_str,"Welcome to OSP3A\0",0,0,0);
+
+
+	for (; i < 10; i++){
+		interrupt(0x80,iter,i,buf,0,0); 
+		interrupt(0x80,print_str,buf,0,0,0);
+		buf = "";
+	}
 	while(1){
 		interrupt(0x80, read_str,str,0,0,0); // read string
 		interrupt(0x80,print_str,str,0,0,0);

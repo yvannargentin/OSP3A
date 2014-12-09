@@ -32,7 +32,7 @@ int remove_file(char *filename) {
 			noSector++;
 		// Offset is 0 or 256 (BlockSize/2). fe is either at the begining of the sector or just at the middle (2fe for each sectors)
 		if(offset == 0)
-			offset = BlockSize/2;
+			offset = FESize;
 		else
 			offset = 0;
 		counter++; 
