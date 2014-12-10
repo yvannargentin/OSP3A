@@ -1,6 +1,6 @@
 int myPow(int a,int b){
       if(b<0)      
-        return (1.0/a)*(myPow(a,b+1)); 
+        return (1/a)*(myPow(a,b+1)); 
       else if(b==0)
         return 1;
       else if(b==1)
@@ -12,11 +12,17 @@ int myPow(int a,int b){
 void intTostr(char* s, int a, int length_str) {
 	int taille_chaine = 1; 	
 
-	int i, puissance10, unite;
+	int i;
+	unsigned int puissance10, unite;
 	int nb_numbers = length_str-1;
 	for(i=0; i<nb_numbers; i++){
-		puissance10 = a/myPow(10, nb_numbers-i-1);
-		unite = puissance10 % 10; //Recuperation de l'unite
+		puissance10 =a/myPow(10, nb_numbers-i-1);
+		unite = puissance10;
+		//Recuperation de l'unite	
+		while(unite >= 10){
+			unite -= 10;
+		}
+
 		s[i] = unite + 48; //48 = 0 en ascii;
 	}
 	s[length_str-1] = '\0';
