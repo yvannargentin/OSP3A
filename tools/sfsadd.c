@@ -77,10 +77,13 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH_F]){
 						if (nbindex > 0)
 							fseek(fp, ((MAX_CONTENT-1)*nbindex), 0);
 
-						fgets(content, MAX_CONTENT, fp); // get the content of the file	
+						//fgets(content, MAX_CONTENT, fp); // get the content of the file
+						fread(content, MAX_CONTENT, 1 ,  fp); // get the content of the file	
 
 						// add the content int the fileContent matching to the index 
 						for (r=0; r< MAX_CONTENT; r++){
+							if ((content[r] == '\n') || (content[r] == '\r'))
+								content[r] = ' ';
 							sfs->fileContent[index][r] = content[r];
 							length++;				
 						}
