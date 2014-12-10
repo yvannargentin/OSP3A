@@ -1,5 +1,5 @@
 #include "nomenclature.h"
-// #include "structure.h"
+#include "structures.h"
 
 extern int interrupt(int number, int ax, int bx, int cx, int dx, int di);
 
@@ -38,22 +38,29 @@ int iterator(int isOk, char *buf) {
 int get_stat(char *filename, struct stat_st *stat) {
 	
 	uchar buf[BlockSize/2];
-	int offset_size = 32;	
-
-	do {
-		iterator(0, buf) {
-	} while (strcomp(buf, filename) != 0);
-
-	int tmp = buf[offset_size++];
-	int tmp2 = buf[offset_size];
-	int size = tmp+(tmp2<<8);
+	int offset_size = 32;
+	int tmp;
+	int tmp2;
+	int size;
+	int length_str;	
+	int isOk;
+	char str[6]; //2**16 => sur 5 caracateres, espace prevu pour le \0
 	
-	stat->filename = filename;
+	
+	do {
+		iterator(isOk, buf);
+	} while ((strcomp(buf, filename) != 0) && (isOk == 0));
+
+	tmp = buf[offset_size++];
+	tmp2 = buf[offset_size];
+	size = tmp+(tmp2<<8);
+	
+	//stat->filename = &filename;
 	stat->size = size;
 	
-	int length_str = lengthInt(size);
-	char str[length_str]; //espace prevu pour le \0
-	intTostr(str, test, length_str);
+	length_str = lengthInt(size);
+	
+	intTostr(str, size, length_str);
 
 	interrupt(0x80,print_str,str,0,0,0);
 }
