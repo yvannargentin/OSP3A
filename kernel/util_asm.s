@@ -28,13 +28,22 @@ _init_syscalls:
 	pop bp
 	ret
 
-
+; m = modulo(int a, int b);
 _modulo:
-	push bx
-	push ax
-	mov dx, 0     
-	div bx  ; Divides 1234 by 10. DX = 4 and AX = 123
-	mov ax, dx
+	push bp
+	mov bp, sp
+	
+	mov ax, [bp+4]	; Get arguments
+	mov bx, [bp+6]	;
+
+	div bx       ; Divides ax by bx. DX = rest and AX = division
+	
+	push ds		; Passing DX in AX
+	mov ds, dx
+	mov ax, ds
+	pop ds
+
+	pop bp
 	ret
 	
 

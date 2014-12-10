@@ -1,3 +1,5 @@
+#include "nomenclature.h"
+
 int myPow(int a,int b){
       if(b<0)      
         return (1/a)*(myPow(a,b+1)); 
@@ -13,19 +15,24 @@ void intTostr(char* s, int a, int length_str) {
 	int taille_chaine = 1; 	
 
 	int i;
-	unsigned int puissance10, unite;
+	int puissance10, unite;
 	int nb_numbers = length_str-1;
 	for(i=0; i<nb_numbers; i++){
 		puissance10 =a/myPow(10, nb_numbers-i-1);
-		unite = puissance10;
-		//Recuperation de l'unite	
-		while(unite >= 10){
-			unite -= 10;
-		}
+		//unite = puisance10;
+
+		// interrupt(0x80,print_str,"",0,0,0);
+		print_string("");
+
+		unite = modulo(puissance10, 10);
+
+		// print_string("");
 
 		s[i] = unite + 48; //48 = 0 en ascii;
 	}
 	s[length_str-1] = '\0';
+
+	//print_string(s);
 }
 
 int lengthInt(int a){
