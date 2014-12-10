@@ -36,6 +36,7 @@ qemu : image.img
 
 clean :
 	rm -rf *.img
+	rm -rf *~
 	make clean -C kernel
 	make clean -C boot
 	make clean -C tools
