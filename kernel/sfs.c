@@ -15,13 +15,13 @@ int iterator(int isOk, char *buf) {
 	// divide by 2
 
 	while(buf[offset] == '0'){
-		if (counter%2==1)
-			Shift++;
 
 		if(offset == 0) // switch between first and 2nd FE in the sector
 			offset = FESize;
-		else
+		else{
 			offset = 0;
+			Shift++;
+		}
 
 		interrupt(0x80,read_sect,FeStart + Shift, buf,0,0);
 		counter++;	
