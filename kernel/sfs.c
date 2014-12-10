@@ -30,7 +30,6 @@ int iterator(int isOk, char *buf) {
 	isOk = 0;
 	if (counter >= nbFE)
 		isOk = 1; // end of FE
-	counter %= nbFE;
 
 	return 0;
 }
@@ -71,17 +70,17 @@ int get_stat(char *filename, struct stat_st *stat) {
 int remove_file(char *filename) {	
 	// Iterate on fileEntries
 	uchar buf[BlockSize];
-	int noSector = FeStart;	// Sector number containing fe (24 for the first one)
-	int offset = 0;		// offset of fe in sector (0 or 256)
-	int counter = 0;
+	unsigned int noSector = FeStart;	// Sector number containing fe (24 for the first one)
+	unsigned int offset = 0;		// offset of fe in sector (0 or 256)
+	unsigned int counter = 0;
 	unsigned char map[BlockSize];
-	int debutIndexes = 34;
-	int indexFile;
-	int indexBitmap;
-	int decalage;
-	int indexF;
-	int tmp;
-	int tmp2;
+	unsigned int debutIndexes = 34;
+	unsigned int indexFile;
+	unsigned int indexBitmap;
+	unsigned int decalage;
+	unsigned int indexF;
+	unsigned int tmp;
+	unsigned int tmp2;
 
 	// Find 
 	do {
@@ -123,7 +122,7 @@ int remove_file(char *filename) {
 
 		// Find the bit to change in the bitmap
 		indexBitmap = indexF/8;
-		decalage = indexF%8-1;
+		decalage = (indexF%8)-1;
 		// Put the bit to 0
 		interrupt(0x80,print_str,&map[indexBitmap],0,0,0); 
 		map[indexBitmap] &= ~(1<<decalage);
