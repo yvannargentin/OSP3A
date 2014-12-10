@@ -18,4 +18,5 @@ run: all
 
 clean :
 	rm -rf *.o structure 
+	rm -rf *~
 	
