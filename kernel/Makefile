@@ -23,4 +23,5 @@ rebuild : clean build
 
 clean :
 	rm -rf ../object/*.o
+	rm -rf *~
 	

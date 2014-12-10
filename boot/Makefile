@@ -12,4 +12,5 @@ rebuild : clean build
 
 clean :
 	rm -rf ../object/boot.bin
+	rm -rf *~
 	

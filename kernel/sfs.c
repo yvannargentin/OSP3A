@@ -12,6 +12,7 @@ int counter = 0;
 int offset = 0;
 // fill buf with F, isOk indicates if you can keep calling iterator or not
 int iterator(int isOk, char *buf) {
+	int nbFE = 64;
 	// divide by 2
 
 	while(buf[offset] == '0'){
@@ -27,8 +28,9 @@ int iterator(int isOk, char *buf) {
 		counter++;	
 	}
 	isOk = 0;
-	if (counter >= 64)
+	if (counter >= nbFE)
 		isOk = 1; // end of FE
+	counter %= nbFE;
 
 	return 0;
 }
