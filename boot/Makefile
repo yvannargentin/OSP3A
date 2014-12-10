@@ -1,12 +1,8 @@
-CC=bcc
-CFLAGS=-W -V -I -ansi
-LDFLAGS=-M -m -d -s
+# Makefile boot 
+OUT=../object/boot.bin
 
-
-all : build
-
-build :
-	nasm bootloader.s -f bin -o ../object/boot.bin
+$(OUT): bootloader.s
+	nasm -f bin $< -o $@
 
 rebuild : clean build
 

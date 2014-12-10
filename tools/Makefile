@@ -1,3 +1,5 @@
+# Makefile tools
+
 CC=gcc
 CFLAGS=-c
 
