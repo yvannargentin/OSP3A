@@ -30,15 +30,21 @@ int iterator(int isOk, char *buf) {
 		}
 
 		interrupt(0x80,read_sect,FeStart + Shift, result,0,0);
-		counter++;	
+		counter++;
 	}while (&result[offset] == '0');
 	strncpy(buf,&result[offset],BlockSize);
+	//sprint_string(buf);
 	isOk = 0;
-	if (counter >= nbFE)
+	if (counter >= nbFE){
 		isOk = 1; // end of FE
+		counter = 0;
+		Shift = -1;
+	}
 
 	return 0;
 }
+
+
 
 /*
 This fonction get the stats of the file and put it on a structure
@@ -59,6 +65,7 @@ int get_stat(char *filename, struct stat_st *stat) {
 	
 	do {
 		iterator(isOk, buf);
+		print_string(buf);
 	} while ((strcomp(&buf, filename) != 0) && (isOk == 0));
 
 	tmp = buf[offset_size++];
