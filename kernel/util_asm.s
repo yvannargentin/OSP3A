@@ -34,14 +34,10 @@ _modulo:
 	mov bp, sp
 	
 	mov ax, [bp+4]	; Get arguments
+	mov dx, #0
 	mov bx, [bp+6]	;
-
 	div bx       ; Divides ax by bx. DX = rest and AX = division
-	
-	push ds		; Passing DX in AX
-	mov ds, dx
-	mov ax, ds
-	pop ds
+	mov ax, dx
 
 	pop bp
 	ret
