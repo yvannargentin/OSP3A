@@ -11,9 +11,9 @@ int offset = 1;
 // 
 /*
 This fonction iterate on the files and fill buf
-\param isOk tindicates if you can keep calling iterator or not
+\param isOk = 1 when you reached the end of the FEntries
 \param buf that we fill
-\return return 0 if succeed and -1 if failure
+\return return 0 if succeed
 */
 int iterator(int isOk, char *buf) {
 	int nbFE = MaxFe;
