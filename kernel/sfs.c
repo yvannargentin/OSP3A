@@ -2,20 +2,23 @@
 #include "structures.h"
 
 extern int interrupt(int number, int ax, int bx, int cx, int dx, int di);
+extern char* strncpy(char *s1, const char *s2, size_t n);
+int lengthStr(char* tab);
 
 typedef unsigned char uchar;
 
 
 int strcomp(const char *s1, const char *s2);
-int Shift = 0;
+int Shift = -1;
 int counter = 0;
-int offset = 0;
+int offset = 1;
 // fill buf with F, isOk indicates if you can keep calling iterator or not
 int iterator(int isOk, char *buf) {
 	int nbFE = 64;
 	// divide by 2
-
-	while(buf[offset] == '0'){
+	char result[BlockSize];
+	int i;
+	do{
 
 		if(offset == 0) // switch between first and 2nd FE in the sector
 			offset = FESize;
@@ -24,9 +27,10 @@ int iterator(int isOk, char *buf) {
 			Shift++;
 		}
 
-		interrupt(0x80,read_sect,FeStart + Shift, buf,0,0);
+		interrupt(0x80,read_sect,FeStart + Shift, result,0,0);
 		counter++;	
-	}
+	}while (&result[offset] == '0');
+	strncpy(buf,&result[offset],BlockSize);
 	isOk = 0;
 	if (counter >= nbFE)
 		isOk = 1; // end of FE
@@ -37,7 +41,7 @@ int iterator(int isOk, char *buf) {
 int get_stat(char *filename, struct stat_st *stat) {
 	
 	uchar buf[BlockSize/2];
-	int offset_size = 32;
+	int offset_size = 32;	
 	int tmp;
 	int tmp2;
 	int size;
