@@ -82,9 +82,12 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH_F]){
 
 						// add the content int the fileContent matching to the index 
 						for (r=0; r< MAX_CONTENT; r++){
-							if ((content[r] == '\n') || (content[r] == '\r'))
-								content[r] = ' ';
-							sfs->fileContent[index][r] = content[r];
+							if ((content[r] == '\n')){
+								sfs->fileContent[index][r] = 10;
+								r++;
+								sfs->fileContent[index][r] = 13;
+							}else
+								sfs->fileContent[index][r] = content[r];
 							length++;				
 						}
 

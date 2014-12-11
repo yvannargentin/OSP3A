@@ -26,19 +26,17 @@ int read_file(char *filename, unsigned char *buf){
 	int indexes = TabIndexesStart;
 	int nb_sector_fc = 0;
 	unsigned char content[BlockSize];
-	unsigned char content1[BlockSize];
 	int tmp;
 	int tmp2;
-	int r;
 	int length_str;
-	char *str;
+	char str[6];
 
 	//get the right sector number and the buffer of this sector
 	//a sector as 2 FileEntries
 	do {
 		interrupt(0x80,read_sect,nb_sector_fe, sect,0,0); 
 
-		if(cpt%2 == 1)
+		if(modulo(cpt,2) == 1)
 			nb_sector_fe++;
 
 		// offset is to know which FileEntry we are going to use in this sector
@@ -59,39 +57,34 @@ int read_file(char *filename, unsigned char *buf){
 	// iterate on the tabIndexes used
 	do {
 		// get the value of the tabIndexes
-		tmp = buf[indexes++];
-		tmp2 = buf[indexes++];
+		tmp = sect[indexes++];
+		tmp2 = sect[indexes++];
 		index = tmp+(tmp2<<8);
 		nb_sector_fc = FCStart + index;	
 		
+		/*print_string("tab indexes");
+		length_str = lengthInt(index);
+		intTostr(str, lengthStr(content), length_str);
+		print_string(str);
+		length_str =0;
+		str[0] = 0;*/
+		
 		// read the content of fileContent 
 		interrupt(0x80,read_sect,nb_sector_fc, content,0,0);
-		strncpy(buf, content,  lengthStr(content) -1); // copy the content in the buffer
-
-		length_str = lengthInt(lengthStr(content));
-		print_string(intTostr(str, lengthStr(content), length_str));
+		strncpy(buf,&content, BlockSize); // copy the content in the buffer
 		
-		for (r=0; r< lengthStr(content); r++)
-			content[r] = 0;
+		/*length_str = lengthInt(lengthStr(content));
+		intTostr(str, lengthStr(content), length_str);
+		print_string(str);*/
 
 		// content separted in 2 sectors
-		if (lengthStr(content) == (BlockSize -1)){
-			interrupt(0x80,print_str, "2e sector", 0, 0,0);
-			interrupt(0x80,read_sect,nb_sector_fc+1, content1,0,0);
-			strncpy(buf, content1, BlockSize); // copy the content in the buffer
-			
-
+		if (lengthStr(content) == BlockSize){
+			interrupt(0x80,read_sect,nb_sector_fc+1, content,0,0);
+			strncpy(buf, &content, BlockSize); // copy the content in the buffer
 		}
-		for (r=0; r< lengthStr(content1); r++)
-				content1[r] = 0;
-		
 
 	} while (index != 0);
-		
-
 	interrupt(0x80,print_str, "file readed", 0, 0,0);
-
-	interrupt(0x80,print_str, buf, 0, 0,0);
 	return 0;	
 }
 
