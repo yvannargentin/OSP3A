@@ -1,26 +1,30 @@
-#include <string.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <fcntl.h>
+/*
+\file sfsadd.c
+\brief this file content the fonction to add a file in the file system
+*/
 #include "structure.h"
 
 extern SimpleFileSystem sfscreate (char *sfsName);
-extern void sfsadd(SimpleFileSystem *sfs , char filename[32]);
+extern void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH_F]);
 extern void sfsls(SimpleFileSystem sfs);
-extern void sfsdel(SimpleFileSystem *sfs, char filename[32]);
+extern void sfsdel(SimpleFileSystem *sfs, char filename[LENGTH_F]);
 
+/*
+This fonction create the image of the sfs
+\param sfs the sfs to put in the image
+*/
 void sfsimg (SimpleFileSystem sfs){
 	int file = open("fs.img", O_WRONLY|O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO);
-	write(file, &sfs.sb, 18);
+	write(file, &sfs.sb, LENGTH_SB );
 	
 	//Remplir le reste du block avec des 0	
 	int i;
 	char j = 0;
-	int borne = 1024-18;	
+	int borne = MAX_CONTENT-LENGTH_SB ;	
 	for(i=0;i<borne;i++) {
 		write(file, &j, 1);
 	}
-	write(file, &sfs.bitmap, 1024);
+	write(file, &sfs.bitmap, MAX_CONTENT);
 
 	int nbFE = 0;
 	int id = 0;
@@ -28,18 +32,26 @@ void sfsimg (SimpleFileSystem sfs){
 	while (sfs.fe[id++].size != 0)
 		nbFE++;
 
-	write(file, &sfs.fe, 256*nbFE);
+	write(file, &sfs.fe, BLOCK*nbFE);
 	//Remplir le reste du block avec des 0
-	borne = (1024*16)-(256*nbFE);
+	borne = (MAX_CONTENT*ReservedFE)-(BLOCK*nbFE)
+
+;
 	for(i=0;i<borne;i++) {
 		write(file, &j, 1);
 	}
 	
 
-	write(file, &sfs.fileContent, 1024*256);
+	write(file, &sfs.fileContent, MAX_CONTENT*BLOCK);
 	close(file);
 }
 
+/*
+This is the main fonction
+\param argc number of args passed in parameter
+\param argv args passed in parameter
+\return return 0 
+*/
 int main(int argc, char **argv){
 	SimpleFileSystem sf = sfscreate("sfs");
 	sfsadd(&sf, "test.txt\0");

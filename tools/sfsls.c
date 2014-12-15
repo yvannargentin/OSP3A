@@ -1,9 +1,13 @@
-#include <string.h>
-#include <stdio.h>
-#include <stdbool.h>
+/*
+\file sfsadd.c
+\brief this file content the fonction to add a file in the file system
+*/
 #include "structure.h"
  
-
+/*
+This fonction list a sfs
+\param monSFS the sfs to list
+*/
 void sfsls(SimpleFileSystem monSFS) {
 	int nbFiles = 0;
 	bool continuer = true;

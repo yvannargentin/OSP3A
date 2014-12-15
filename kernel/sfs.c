@@ -1,18 +1,20 @@
+/*
+\file sfs.c
+\brief this file content the fonctions for the Simple File System
+*/
+
 #include "nomenclature.h"
-#include "structures.h"
 
-extern int interrupt(int number, int ax, int bx, int cx, int dx, int di);
-extern char* strncpy(char *s1, const char *s2, size_t n);
-int lengthStr(char* tab);
-
-typedef unsigned char uchar;
-
-
-int strcomp(const char *s1, const char *s2);
 int Shift = -1;
 int counter = 0;
 int offset = 1;
-// fill buf with F, isOk indicates if you can keep calling iterator or not
+// 
+/*
+This fonction iterate on the files and fill buf
+\param isOk tindicates if you can keep calling iterator or not
+\param buf that we fill
+\return return 0 if succeed and -1 if failure
+*/
 int iterator(int isOk, char *buf) {
 	int nbFE = 64;
 	// divide by 2
@@ -38,6 +40,12 @@ int iterator(int isOk, char *buf) {
 	return 0;
 }
 
+/*
+This fonction get the stats of the file and put it on a structure
+\param filename the name of the file to read
+\param stat_st *stat the structure that we fill
+\return return 0 if succeed and -1 if failure
+*/
 int get_stat(char *filename, struct stat_st *stat) {
 	
 	uchar buf[BlockSize/2];
@@ -68,9 +76,11 @@ int get_stat(char *filename, struct stat_st *stat) {
 	interrupt(0x80,print_str,str,0,0,0);
 }
 
-/* remove_file.c
- * Removes a file which name's given in parameter
- */
+/*
+This fonction removes a file which name's given in parameter
+\param filename the name of the file to remove
+\return return 0 if succeed and -1 if failure
+*/
 int remove_file(char *filename) {	
 	// Iterate on fileEntries
 	uchar buf[BlockSize];
@@ -142,12 +152,69 @@ int remove_file(char *filename) {
 	return 0;
 }
 
-int strcomp(char *s1, char *s2) {
-	for ( ; *s1 == *s2; s1++, s2++){
-		if (*s1 == '\0')
-		    return 0;
-	}
-	return ((*(unsigned char *)s1 < *(unsigned char *)s2) ? -1 : +1);
-}
+/*
+This fonction read the content of the file in param and fill a buffer with it
+\param filename the name of the file to read
+\param buf the content of the file
+\return return 0 if succeed and -1 if failure
+*/
+int read_file(char *filename, unsigned char *buf){
+	int nb_sector_fe = FeStart;
+	int offset = 0;
+	unsigned char sect[BlockSize];
+	int cpt = 0;
+	int index;
+	int indexes = TabIndexesStart;
+	int nb_sector_fc = 0;
+	unsigned char content[BlockSize];
+	int tmp;
+	int tmp2;
+	int length_str;
+	char str[6];
 
+	//get the right sector number and the buffer of this sector
+	//a sector as 2 FileEntries
+	do {
+		interrupt(0x80,read_sect,nb_sector_fe, sect,0,0); 
+
+		if(modulo(cpt,2) == 1)
+			nb_sector_fe++;
+
+		// offset is to know which FileEntry we are going to use in this sector
+		if(offset == 0)
+			offset = BlockSize/2; 
+		else
+			offset = 0;
+
+		// exit if the file is note found
+		if (cpt > MaxFe)
+			return -1;
+
+		cpt++;
+	} while (strcomp(&sect[offset],filename) != 0);
+
+	indexes += offset; // get where the tabIndexes starts
+
+	// iterate on the tabIndexes used
+	do {
+		// get the value of the tabIndexes
+		tmp = sect[indexes++];
+		tmp2 = sect[indexes++];
+		index = tmp+(tmp2<<8);
+		nb_sector_fc = FCStart + index;	
+		
+		// read the content of fileContent 
+		interrupt(0x80,read_sect,nb_sector_fc, content,0,0);
+		strncpy(buf,&content, BlockSize); // copy the content in the buffer
+		
+		// content separted in 2 sectors
+		if (lengthStr(content) == BlockSize){
+			interrupt(0x80,read_sect,nb_sector_fc+1, content,0,0);
+			strncpy(buf, &content, BlockSize); // copy the content in the buffer
+		}
+
+	} while (index != 0);
+	interrupt(0x80,print_str, "file readed", 0, 0,0);
+	return 0;	
+}
 

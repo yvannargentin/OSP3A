@@ -1,3 +1,10 @@
+/*
+\file syscall_handler.c
+\brief this file content a switch who call the right fonction in fonction of interrupt
+*/
+
+#include "nomenclature.h"
+
 extern void print_string(char *str);
 extern void read_string(char *buf);
 extern void read_sector(int sector, uchar *buf);
@@ -6,20 +13,13 @@ extern int iterator(int counter, char *buf);
 extern int get_stat(char *filename, struct stat_st *stat);
 extern int read_file(char *filename, unsigned char *buf);
 extern int remove_file(char *filename);
-#include "nomenclature.h"
 
-typedef unsigned int uint;
-
+/*
+This fonction content the switch 
+\param syscall_nb the call we want
+\param arg1.. arg4 the variables that we have to pass to a the fonction
+*/
 void syscall_handler(uint syscall_nb, uint arg1, uint arg2, uint arg3, uint arg4) {
-	
-	// 1 : void print_string(char *str);
-	// 2 : void read_string(char *buf);
-	// 3 : void read_sector(int sector, uchar *buf);
-	// 4 : void write_sector(int sector, uchar *buf);
-	// 5 : void iterator();
-	// 6 : int get_stat(char *filename, struct stat_st *stat);
-	// 7 : int read_file(char *filename, unsigned char *buf);
-	// 8 : int remove_file(char *filename);
  
 	switch(syscall_nb) {
 

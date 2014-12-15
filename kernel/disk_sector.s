@@ -2,7 +2,7 @@
 ;\brief this file content the fonction in assembly who allow to set the DS and get the buffer
 
 .global _sector_raw ; allow to use this fonction in c
-
+;sector_raw(int ah, int interruption, packet p)
 _sector_raw:
 	push bp
 	mov bp, sp

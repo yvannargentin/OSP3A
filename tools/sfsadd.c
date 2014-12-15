@@ -2,26 +2,15 @@
 \file sfsadd.c
 \brief this file content the fonction to add a file in the file system
 */
-
-#include <string.h>
-#include <stdio.h>
-#include <stdbool.h>
 #include "structure.h"
-
-#define MAX_CONTENT 1024
-#define BLOCK 256
-#define LENGTH_F 32
-#define BIT 8
-#define MAX_INDEX 111
 
 int FileSize(char filename[LENGTH_F]);
 bool LengthSupported(char filename[LENGTH_F]);
 
 /*
-This fonction read the content of the file in param and fill a buffer with it
-\param filename the name of the file to read
-\param buf the content of the file
-\return return 0 if succeed and -1 if failure
+This fonction add a file int the sfs
+\param sfs SimpleFileSystem were the file is added
+\param filename the file to add
 */
 void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH_F]){
 	//check if the file is supported

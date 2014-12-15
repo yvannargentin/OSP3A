@@ -1,8 +1,13 @@
+;\file interrupt.s
+;\brief this file content the fonctions in assembly who need
+
 ;util_asm.s
 .global _init_syscalls
 .global _modulo
+.global _divE
 .global _syscall_handler
 .extern _syscall_handler
+
 ; interrupt 0x80 vector (80 * 4 = 320)
 ; interrupts vectors start at address 0x0000:0x0000
 ; each vector uses 4 bytes (32-bit).
@@ -28,21 +33,6 @@ _init_syscalls:
 	pop bp
 	ret
 
-; m = modulo(int a, int b);
-_modulo:
-	push bp
-	mov bp, sp
-	
-	mov ax, [bp+4]	; Get arguments
-	mov dx, #0
-	mov bx, [bp+6]	;
-	div bx       ; Divides ax by bx. DX = rest and AX = division
-	mov ax, dx
-
-	pop bp
-	ret
-	
-
 ; Stub routine called when an interrupt 0x80 occurs.
 ; This stub calls the syscall_handler function defined in the C code.
 ; void syscall_handler(uint syscall_nb, uint arg1, uint arg2, uint arg3, arg4)
@@ -64,7 +54,37 @@ _int80_stub:
 	pop bx
 	pop bx
 	pop bx
-	iret ; pop ip, cs and flags registers (3 registe
+	iret ; pop ip, cs and flags registers (3 registers)
+
+; Calcultate the modulo of 2 int 
+;m = modulo(int a, int b);
+_modulo:
+	push bp
+	mov bp, sp
+	
+	mov ax, [bp+4]	; Get arguments
+	mov dx, #0
+	mov bx, [bp+6]	;
+	div bx       ; Divides ax by bx. DX = rest and AX = division
+	mov ax, dx
+
+	pop bp
+	ret
+
+; Calcultate the division entire of 2 int 
+;divE = divE(int a, int b);
+_divE:
+	push bp
+	mov bp, sp
+	
+	mov ax, [bp+4]	; Get arguments
+	mov dx, #0
+	mov bx, [bp+6]	;
+	div bx       ; Divides ax by bx. DX = rest and AX = division
+
+	pop bp
+	ret
+	
 		
 
 

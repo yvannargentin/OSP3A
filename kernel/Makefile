@@ -5,7 +5,7 @@ CFLAGS=-W -V -I -ansi
 
 all : build
 
-build : ../object/main.o ../object/kernel.o ../object/io.o ../object/sfs.o ../object/sector.o ../object/intTostr.o ../object/read_file.o ../object/syscall_handler.o ../object/util_asm.o ../object/interrupt.o ../object/disk_sector.o 
+build : ../object/main.o ../object/kernel.o ../object/io.o ../object/sfs.o ../object/sector.o ../object/library.o ../object/syscall_handler.o ../object/util_asm.o ../object/interrupt.o ../object/disk_sector.o 
 
 rebuild : clean build
 
@@ -24,10 +24,7 @@ rebuild : clean build
 ../object/sector.o : sector.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-../object/intTostr.o : intTostr.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-../object/read_file.o : read_file.c
+../object/library.o : library.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 ../object/syscall_handler.o : syscall_handler.c

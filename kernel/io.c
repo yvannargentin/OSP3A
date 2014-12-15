@@ -1,16 +1,29 @@
+/*
+\file io.c
+\brief this file content the fonctions of the in/out
+*/
+
 extern int interrupt(int number, int ax, int bx, int cx, int dx, int di);
 
 #define pack(h, l) (h * 256 + l)
 
+/*
+This fonction print a char with the interruption 10
+\param c character that we print
+*/
 void print_char(char c) {
 	int ax, cx, bx;
 	char al = c;
 	ax = pack(0x0e, c);
 	bx = pack(0x00, 0x00); 	//Page number + foreground color
-	cx = pack(0, 1); 	//on affiche 1 caractère
+	cx = pack(0, 1); 	//print 1 character
 	interrupt(0x10, ax, bx, cx, 0,0);
 }
 
+/*
+This fonction print a string using print_char
+\param bug string that we print
+*/
 void print_string(char *buf){ 
 	int i=0; 
 	char al = buf;
@@ -23,7 +36,10 @@ void print_string(char *buf){
 	print_char(13); //Retour chariot
 }
 
-//affiche les caractères tapés au clavier
+/*
+This fonction print the character typed
+\param bug string that we fill
+*/
 void read_string(char *buf){
 	char ascii; 		//Variable qui va receptionner l'entrée clavier
 	int i = 0;		//Initialisation du début de la chaine "buf"
