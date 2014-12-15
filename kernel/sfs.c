@@ -16,7 +16,7 @@ This fonction iterate on the files and fill buf
 \return return 0 if succeed and -1 if failure
 */
 int iterator(int isOk, char *buf) {
-	int nbFE = 64;
+	int nbFE = MaxFe;
 	// divide by 2
 	char result[BlockSize];
 	int i;
@@ -48,19 +48,18 @@ This fonction get the stats of the file and put it on a structure
 */
 int get_stat(char *filename, struct stat_st *stat) {
 	
-	uchar buf[BlockSize/2];
-	int offset_size = 32;	
+	char buf[FESize];
+	int offset_size = OffsetSize; // 32	
 	int tmp;
 	int tmp2;
 	int size;
 	int length_str;	
-	int isOk;
+	int isOk = 0;
 	char str[6]; //2**16 => sur 5 caracateres, espace prevu pour le \0
-	
 	
 	do {
 		iterator(isOk, buf);
-	} while ((strcomp(buf, filename) != 0) && (isOk == 0));
+	} while ((strcomp(&buf, filename) != 0) && (isOk == 0));
 
 	tmp = buf[offset_size++];
 	tmp2 = buf[offset_size];
@@ -88,7 +87,7 @@ int remove_file(char *filename) {
 	unsigned int offset = 0;		// offset of fe in sector (0 or 256)
 	unsigned int counter = 0;
 	unsigned char map[BlockSize];
-	unsigned int debutIndexes = 34;
+	unsigned int debutIndexes = TabIndexesStart;
 	unsigned int indexFile;
 	unsigned int indexBitmap;
 	unsigned int decalage;
@@ -169,8 +168,6 @@ int read_file(char *filename, unsigned char *buf){
 	unsigned char content[BlockSize];
 	int tmp;
 	int tmp2;
-	int length_str;
-	char str[6];
 
 	//get the right sector number and the buffer of this sector
 	//a sector as 2 FileEntries

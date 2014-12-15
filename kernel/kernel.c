@@ -23,6 +23,7 @@ void kernel(void) {
 	init_syscalls(); 		// ecrase interruption 80 pour la notre
 	// print string
 	interrupt(0x80,print_str,"Welcome to OSP3A\0",0,0,0);
+	interrupt(0x80,print_str,"Decommentez votre code dans le kernel pour tester\0",0,0,0);
 
 	/* // write and read sector
 	interrupt(0x80, write_sect,10,"Ecriture  dans secteur 10",0,0);
@@ -34,14 +35,14 @@ void kernel(void) {
 		interrupt(0x80,iter,isOk,buf,0,0); 
 		interrupt(0x80,print_str,buf,0,0,0);
 		counter++;
-	}*/
+	} */
 
 	/* //get stat MARCHE PAS
-	//interrupt(0x80, get_st,"test.txt",stats,0,0); */
+	interrupt(0x80, get_st,"test.txt",stats,0,0);  */
 
-	 // read file
+	/* // read file
 	interrupt(0x80, read_f,"test.txt",buf1,0,0);
-	interrupt(0x80,print_str,&buf1,0,0,0);
+	interrupt(0x80,print_str,&buf1,0,0,0); */
 
 	/* // remove file
 	interrupt(0x80, remove_f,"test.txt",0,0,0);*/
