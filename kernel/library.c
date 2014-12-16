@@ -1,14 +1,15 @@
 /*
-\file nomenclature.h
-\brief this file content the defines, the typedef and the declaration of the fonction extern
+\file library.c
+\brief this file content the fonctions we write that we need in our other fonctions
 */
 
 #include "nomenclature.h"
 
 /*
-This fonction 
-\param tab 
-\return 
+This fonction calculate the pow of 2 int
+\param a the integer that we want to pow
+\param b the integer that we pow on a
+\return return the pow
 */
 int myPow(int a,int b){
       if(b<0)      
@@ -22,9 +23,10 @@ int myPow(int a,int b){
 }
 
 /*
-This fonction 
-\param tab 
-\return 
+This fonction change a int to a string so we can print it
+\param s the string that we fill
+\param a the int that we want to change to a string
+\param length_str length of the int 
 */
 void intTostr(char* s, int a, int length_str) {
 	int taille_chaine = 1; 	
@@ -49,9 +51,9 @@ void intTostr(char* s, int a, int length_str) {
 }
 
 /*
-This fonction 
-\param tab 
-\return 
+This fonction get the length of a integer
+\param a the integer we want to know the length
+\return return the length
 */
 int lengthInt(int a){
 	int length = 1;
@@ -63,9 +65,11 @@ int lengthInt(int a){
 }
 
 /*
-This fonction 
-\param 
-\return 
+This fonction copy the content of a buf into another
+\param s1 the buffer were we copy
+\param s2 the buffer that we copy
+\param n the length of the buffer s2
+\return the buffer s1
 */
 char* strncpy(char *s1, char *s2, int n){
     char *s = s1;
@@ -95,9 +99,10 @@ int lengthStr(char* tab){
 }
 
 /*
-This fonction 
-\param 
-\return 
+This fonction check if 2 string are equals
+\param s1 the string we want to compare
+\param s2 the string we want to compare
+\return return 0 if equals
 */
 int strcomp(char *s1, char *s2) {
 	for ( ; *s1 == *s2; s1++, s2++){
