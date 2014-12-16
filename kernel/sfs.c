@@ -62,24 +62,33 @@ int get_stat(char *filename, struct stat_st *stat) {
 
 	int length_str;	
 	int isOk = 0;
-	char str[6]; //2**16 => sur 5 caracateres, espace prevu pour le \0
+	char str[6]; //2**16 => 5 chars, slot for \0
 	
 	do {
 		iterator(isOk, buf);
 	} while ((strcomp(&buf, filename) != 0) && (isOk == 0));
+		
+	//If the file doesnt exist
+	if(isOk == 1){
+		interrupt(0x80,print_str,"404 File not found",0,0,0);
+		return 1;
+	}
 
 	tmp = buf[offset_size++];
 	tmp2 = buf[offset_size];
 	size = tmp+(tmp2<<8);
 	
-	//stat->filename = &filename;
+	//Copy filename in structure
+	strncpy(stat->filename, filename, 32);
 	stat->size = size;
 	
 	length_str = lengthInt(size);
 	
 	intTostr(str, size, length_str);
 
-	//interrupt(0x80,print_str,str,0,0,0);
+	interrupt(0x80,print_str,stat->filename,0,0,0);
+	interrupt(0x80,print_str,str,0,0,0);
+	return 0;
 }
 
 /*
