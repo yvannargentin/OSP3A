@@ -131,11 +131,9 @@ int remove_file(char *filename) {
 
 	// byte 0 of name = 0
 	buf[offset] = 0;
-	interrupt(0x80,print_str,"First name byte changed to 0",0,0,0); 
 
 	// Load bitmap
 	interrupt(0x80, read_sect, BtmStart, map, 0, 0);
-	interrupt(0x80,print_str,"Loading bitmap from sect 22",0,0,0); 
 
 	// Get the offset of the first file index
 	indexFile = offset+debutIndexes;
@@ -147,22 +145,19 @@ int remove_file(char *filename) {
 		tmp2 = buf[indexFile++];
 		indexF = tmp+(tmp2<<8);
 
-		interrupt(0x80,print_str,"Iterating...",0,0,0); 
-
 		// Find the bit to change in the bitmap
 		indexBitmap = indexF/8;
 		decalage = (indexF%8)-1;
 		// Put the bit to 0
-		interrupt(0x80,print_str,&map[indexBitmap],0,0,0); 
 		map[indexBitmap] &= ~(1<<decalage);
 	} while(indexF != 0);
 
 	// Saving bitmap to image
-	interrupt(0x80, write_sect, BtmStart, map, 0, 0);
-	interrupt(0x80,print_str,"Bitmap saved",0,0,0);  
+	interrupt(0x80, write_sect, BtmStart, map, 0, 0); 
 	// Saving file entry sector
-	interrupt(0x80, write_sect, noSector-1, buf, 0, 0); 
-	interrupt(0x80,print_str,"File entry saved",0,0,0);
+	interrupt(0x80, write_sect, noSector-1, buf, 0, 0);
+
+	interrupt(0x80, print_str, "File deleted", 0, 0, 0);
 
 	return 0;
 }
@@ -227,7 +222,7 @@ int read_file(char *filename, unsigned char *buf){
 		}
 
 	} while (index != 0);
-	interrupt(0x80,print_str, "file readed", 0, 0,0);
+	// interrupt(0x80,print_str, "file readed", 0, 0,0);
 	return 0;	
 }
 
