@@ -15,12 +15,13 @@ This fonction iterate on the files and fill buf
 \param buf that we fill
 \return return 0 if succeed
 */
-int iterator(int isOk, char *buf) {
+int iterator(int *isOk, char *buf) {
 	int nbFE = MaxFe;
 	// divide by 2
 	char result[BlockSize];
 	int i;
 	do{
+		counter++;
 
 		if(offset == 0) // switch between first and 2nd FE in the sector
 			offset = FESize;
@@ -30,10 +31,9 @@ int iterator(int isOk, char *buf) {
 		}
 
 		interrupt(0x80,read_sect,FeStart + Shift, result,0,0);
-		counter++;
 	}while (&result[offset] == '0');
-	strncpy(buf,&result[offset],BlockSize);
-	//sprint_string(buf);
+	strncpy(buf,&result[offset],FESize);
+	//print_string(buf);
 	isOk = 0;
 	if (counter >= nbFE){
 		isOk = 1; // end of FE
@@ -59,14 +59,15 @@ int get_stat(char *filename, struct stat_st *stat) {
 	int tmp;
 	int tmp2;
 	int size;
+
 	int length_str;	
 	int isOk = 0;
 	char str[6]; //2**16 => sur 5 caracateres, espace prevu pour le \0
 	
 	do {
 		iterator(isOk, buf);
-		print_string(buf);
 	} while ((strcomp(&buf, filename) != 0) && (isOk == 0));
+	print_string(buf);
 
 	tmp = buf[offset_size++];
 	tmp2 = buf[offset_size];
@@ -79,7 +80,7 @@ int get_stat(char *filename, struct stat_st *stat) {
 	
 	intTostr(str, size, length_str);
 
-	interrupt(0x80,print_str,str,0,0,0);
+	//interrupt(0x80,print_str,str,0,0,0);
 }
 
 /*
