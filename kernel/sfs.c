@@ -67,7 +67,6 @@ int get_stat(char *filename, struct stat_st *stat) {
 	do {
 		iterator(isOk, buf);
 	} while ((strcomp(&buf, filename) != 0) && (isOk == 0));
-	print_string(buf);
 
 	tmp = buf[offset_size++];
 	tmp2 = buf[offset_size];
