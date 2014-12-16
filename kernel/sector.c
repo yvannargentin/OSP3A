@@ -24,7 +24,7 @@ This fonction read or write a sector in fonction of the interruption
 \param buf the content of the sector
 \param interruption 0x42 to read or 0x43 to write
 */
-void sector(int sector_number, uchar *buf, int interruption){
+int sector(int sector_number, uchar *buf, int interruption){
 
 	packet p;
 	p.size = 0x10;
@@ -38,4 +38,5 @@ void sector(int sector_number, uchar *buf, int interruption){
 	p.first_sect[3] = 0;
 
 	sector_raw(interruption, 0x80, &p);
+	return 0;
 }

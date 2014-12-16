@@ -30,7 +30,9 @@ int iterator(int *isOk, char *buf) {
 			Shift++;
 		}
 
-		interrupt(0x80,read_sect,FeStart + Shift, result,0,0);
+		if(interrupt(0x80,read_sect,FeStart + Shift, result,0,0) != 0)
+			return -1; // error occured in read_sector
+		
 	}while (&result[offset] == '0');
 	strncpy(buf,&result[offset],FESize);
 	//print_string(buf);
@@ -63,15 +65,18 @@ int get_stat(char *filename, struct stat_st *stat) {
 	int length_str;	
 	int isOk = 0;
 	char str[6]; //2**16 => 5 chars, slot for \0
-	
+	int result= 0;
 	do {
-		iterator(isOk, buf);
+		if(iterator(isOk, buf) != 0)
+			return -1; // error occured in iterator
 	} while ((strcomp(&buf, filename) != 0) && (isOk == 0));
-		
+
 	//If the file doesnt exist
 	if(isOk == 1){
-		interrupt(0x80,print_str,"404 File not found",0,0,0);
-		return 1;
+		//interrupt(0x80,print_str,"File not found",0,0,0);
+		if(print_string("File not found")!= 0)
+			return -1; // error occured in print_string
+		return -1;
 	}
 
 	tmp = buf[offset_size++];
@@ -86,8 +91,10 @@ int get_stat(char *filename, struct stat_st *stat) {
 	
 	intTostr(str, size, length_str);
 
-	interrupt(0x80,print_str,stat->filename,0,0,0);
-	interrupt(0x80,print_str,str,0,0,0);
+	if(interrupt(0x80,print_str,stat->filename,0,0,0)!= 0)
+		return -1; // error occured in print_string
+	if(interrupt(0x80,print_str,str,0,0,0)!= 0)
+		return -1; // error occured in print_string
 	return 0;
 }
 
@@ -113,7 +120,8 @@ int remove_file(char *filename) {
 
 	// Find 
 	do {
-		interrupt(0x80,read_sect,noSector, buf,0,0);
+		if(interrupt(0x80,read_sect,noSector, buf,0,0)!= 0)
+			return -1; // error occured in read_sector
 		// Inc counter each 2 fe (one sector contains 2 fe)
 		if((counter%2) == 1)
 			noSector++;
@@ -133,7 +141,8 @@ int remove_file(char *filename) {
 	buf[offset] = 0;
 
 	// Load bitmap
-	interrupt(0x80, read_sect, BtmStart, map, 0, 0);
+	if(interrupt(0x80, read_sect, BtmStart, map, 0, 0) != 0)
+		return -1; // error occured in read_sector
 
 	// Get the offset of the first file index
 	indexFile = offset+debutIndexes;
@@ -153,11 +162,14 @@ int remove_file(char *filename) {
 	} while(indexF != 0);
 
 	// Saving bitmap to image
-	interrupt(0x80, write_sect, BtmStart, map, 0, 0); 
+	if(interrupt(0x80, write_sect, BtmStart, map, 0, 0)!= 0)
+		return -1; // error occured in write_sector
 	// Saving file entry sector
-	interrupt(0x80, write_sect, noSector-1, buf, 0, 0);
+	if(interrupt(0x80, write_sect, noSector-1, buf, 0, 0)!= 0)
+		return -1; // error occured in write_sector
 
-	interrupt(0x80, print_str, "File deleted", 0, 0, 0);
+	if(interrupt(0x80, print_str, "File deleted", 0, 0, 0) != 0)
+		return -1; // error occured with print_string
 
 	return 0;
 }
@@ -183,7 +195,8 @@ int read_file(char *filename, unsigned char *buf){
 	//get the right sector number and the buffer of this sector
 	//a sector as 2 FileEntries
 	do {
-		interrupt(0x80,read_sect,nb_sector_fe, sect,0,0); 
+		if(interrupt(0x80,read_sect,nb_sector_fe, sect,0,0) != 0)
+			return -1; //error occured in read_sector
 
 		if(modulo(cpt,2) == 1)
 			nb_sector_fe++;
@@ -212,12 +225,14 @@ int read_file(char *filename, unsigned char *buf){
 		nb_sector_fc = FCStart + index;	
 		
 		// read the content of fileContent 
-		interrupt(0x80,read_sect,nb_sector_fc, content,0,0);
+		if(interrupt(0x80,read_sect,nb_sector_fc, content,0,0) != 0)
+			return -1; // error occured in read_sector
 		strncpy(buf,&content, BlockSize); // copy the content in the buffer
 		
 		// content separted in 2 sectors
 		if (lengthStr(content) == BlockSize){
-			interrupt(0x80,read_sect,nb_sector_fc+1, content,0,0);
+			if(interrupt(0x80,read_sect,nb_sector_fc+1, content,0,0) != 0)
+				return -1; // error occured in read_sector
 			strncpy(buf, &content, BlockSize); // copy the content in the buffer
 		}
 
