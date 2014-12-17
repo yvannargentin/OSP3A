@@ -174,7 +174,7 @@ int remove_file(char *filename) {
 	if(interrupt(0x80, write_sect, BtmStart, map, 0, 0)!= 0)
 		return -1; // error occured in write_sector
 	// Saving file entry sector
-	if(interrupt(0x80, write_sect, noSector-1, buf, 0, 0)!= 0)
+	if(interrupt(0x80, write_sect, noSector, buf, 0, 0)!= 0)
 		return -1; // error occured in write_sector
 
 	if(interrupt(0x80, print_str, "File deleted", 0, 0, 0) != 0)
