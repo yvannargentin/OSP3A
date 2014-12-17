@@ -32,7 +32,7 @@ typedef struct stat_st {
 	int size;
 } stat_st;
 
-extern char* strncpy(char *s1, const char *s2, size_t n);
+extern int strncpy(char *s1, const char *s2, size_t n, int var);
 extern int lengthStr(char* tab);
 extern int strcomp(const char *s1, const char *s2);
 extern void intTostr(char* s, int a, int length_str);
