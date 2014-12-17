@@ -71,6 +71,10 @@ This fonction copy the content of a string into another
 \param n the length of the buffer s2
 \return the buffer s1
 */
+
+// !\/! //
+// Tu n'as pas besoin de retourner s1 il est modifié car tu envoie un pointeur à ta fonction ana
+// !\/! //
 char* strncpy(char *s1, char *s2, int n){
     char *s = s1;
     while (n > 0 && *s2 != '\0') {
@@ -91,7 +95,7 @@ This fonction copy the content of a buf into another without stopping if it enco
 \param n the length of the buffer s2
 \return the buffer s1
 */
-char* strcpy(char *s1, char *s2, int n){
+int strcpy(char *s1, char *s2, int n){
     char *s = s1;
     while (n > 0) {
 	*s++ = *s2++;
@@ -101,7 +105,7 @@ char* strcpy(char *s1, char *s2, int n){
 	*s++ = '\0';
 	--n;
     }
-    return s1;
+    return 0;
 }
 
 /*

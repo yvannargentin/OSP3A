@@ -28,7 +28,7 @@ This fonction print a string using print_char
 int print_string(char *buf){ 
 	int i=0; 
 	char al = buf;
-	
+
 	while(buf[i] !='\0'){		//Parcours de la chaine
 		print_char(buf[i]); 	//Affichage d'un seul caractère
 		i += 1;
