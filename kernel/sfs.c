@@ -141,9 +141,9 @@ int remove_file(char *filename) {
 			offset = 0;
 		counter++; 
 		
-	} while (strcomp(&buf[offset],filename) != 0 || counter > 64);
+	} while (strcomp(&buf[offset],filename) != 0 || counter > MaxFe);
 	
-	if(counter > 64)
+	if(counter > MaxFe)
 		return -1;	// File not found
 
 	// byte 0 of name = 0
