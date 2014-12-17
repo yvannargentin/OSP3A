@@ -36,7 +36,7 @@ int iterator(int *isOk, char *buf) {
 			return -1; // error occured in read_sector
 		
 	}while (&result[offset] == '0');
-	if(strcpy(buf,&result[offset],FESize)!= 0)
+	if(strncpy(buf,&result[offset],FESize, 1)!= 0)
 		return -1; // error occured with strcpy
 
 	if (counter >= nbFE){
@@ -87,7 +87,7 @@ int get_stat(char *filename, struct stat_st *stat) {
 	size = tmp+(tmp2<<8);
 	
 	//Copy filename in structure
-	strncpy(stat->filename, filename, 32);
+	strncpy(stat->filename, filename, OffsetSize, 0);
 	stat->size = size;
 	
 	length_str = lengthInt(size);
@@ -236,13 +236,13 @@ int read_file(char *filename, unsigned char *buf){
 		// read the content of fileContent 
 		if(interrupt(0x80,read_sect,nb_sector_fc, content,0,0) != 0)
 			return -1; // error occured in read_sector
-		strncpy(buf,&content, BlockSize); // copy the content in the buffer
+		strncpy(buf,&content, BlockSize, 0); // copy the content in the buffer
 		
 		// content separted in 2 sectors
 		if (lengthStr(content) == BlockSize){
 			if(interrupt(0x80,read_sect,nb_sector_fc+1, content,0,0) != 0)
 				return -1; // error occured in read_sector
-			strncpy(buf, &content, BlockSize); // copy the content in the buffer
+			strncpy(buf, &content, BlockSize, 0); // copy the content in the buffer
 		}
 
 	} while (index != 0);

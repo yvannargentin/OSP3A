@@ -69,43 +69,27 @@ This fonction copy the content of a string into another
 \param s1 the buffer were we copy
 \param s2 the buffer that we copy
 \param n the length of the buffer s2
-\return the buffer s1
+\param var allow to stop or not when \0 found
+\return return 0
 */
-
-// !\/! //
-// Tu n'as pas besoin de retourner s1 il est modifié car tu envoie un pointeur à ta fonction ana
-// !\/! //
-char* strncpy(char *s1, char *s2, int n){
-    char *s = s1;
-    while (n > 0 && *s2 != '\0') {
-	*s++ = *s2++;
-	--n;
-    }
-    while (n > 0) {
-	*s++ = '\0';
-	--n;
-    }
-    return s1;
-}
-
-/*
-This fonction copy the content of a buf into another without stopping if it encounters a \0
-\param s1 the buffer were we copy
-\param s2 the buffer that we copy
-\param n the length of the buffer s2
-\return the buffer s1
-*/
-int strcpy(char *s1, char *s2, int n){
-    char *s = s1;
-    while (n > 0) {
-	*s++ = *s2++;
-	--n;
-    }
-    while (n > 0) {
-	*s++ = '\0';
-	--n;
-    }
-    return 0;
+int strncpy(char *s1, char *s2, int n, int var){
+	char *s = s1;
+	if (var == 0){
+		while (n > 0 && *s2 != '\0') {
+			*s++ = *s2++;
+			--n;
+		}
+	}else{
+		while (n > 0) {
+			*s++ = *s2++;
+			--n;
+		}
+	}
+	while (n > 0) {
+		*s++ = '\0';
+		--n;
+	}
+	return 0;
 }
 
 /*
