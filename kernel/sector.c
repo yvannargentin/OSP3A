@@ -5,7 +5,7 @@
 
 typedef unsigned char uchar;
 typedef unsigned int uint;
-
+#define NbSector 100
 /* structure who contain the packet
 \struct packet
 */
@@ -33,10 +33,8 @@ int sector(int sector_number, uchar *buf, int interruption){
 	p.buf_offset = buf;
 	//p.buf_segment => segment is set in the asm code
 	p.first_sect[0] = sector_number;
-
-	// !\/! //
-	// tester si sector_number dépasse le nombre de secteurs max sinon return -1
-	// !\/! //
+	if(sector_number >= NbSector)
+		return -1; // error occured in write/read_sector
 
 	p.first_sect[1] = 0;
 	p.first_sect[2] = 0;
