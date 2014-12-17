@@ -126,7 +126,6 @@ int remove_file(char *filename) {
 	unsigned int indexF;
 	unsigned int tmp;
 	unsigned int tmp2;
-	unsigned int lol;
 
 	if(interrupt(0x80,read_sect,noSector, buf,0,0)!= 0) 
 		return -1; // error occured in read_sector
@@ -138,8 +137,7 @@ int remove_file(char *filename) {
 			return -1; // error occured in read_sector
 
 		// Inc counter each 2 fe (one sector contains 2 fe)
-		lol = modulo(counter,2);
-		if(lol == 1) 
+		if(modulo(counter,2) == 1) 
 			noSector++;
 
 		// Offset is 0 or 256 (BlockSize/2). fe is either at the begining of the sector or just at the middle (2fe for each sectors)
