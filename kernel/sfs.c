@@ -65,11 +65,11 @@ int get_stat(char *filename, struct stat_st *stat) {
 	int size;
 
 	int length_str;	
-	int isOk = 0;
+	int *isOk = 0;
 	char str[6]; //2**16 => 5 chars, slot for \0
 	int result= 0;
 	do {
-		if(iterator(isOk, buf) != 0)
+		if(iterator(&isOk, buf) != 0)
 			return -1; // error occured in iterator
 	} while ((strcomp(&buf, filename) != 0) && (isOk == 0));
 
@@ -97,6 +97,12 @@ int get_stat(char *filename, struct stat_st *stat) {
 		return -1; // error occured in print_string
 	if(interrupt(0x80,print_str,str,0,0,0)!= 0)
 		return -1; // error occured in print_string
+
+	
+	while(isOk == 0) // we still want to reset the iterator so we keep iterating till isOk == 1
+		if(iterator(&isOk, buf) != 0)
+			return -1; // error occured in iterator
+
 	return 0;
 }
 

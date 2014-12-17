@@ -11,13 +11,16 @@ This fonction get the stats of the file and put it on a structure
 \param stat_st *stat the structure that we fill
 \return return 0 if succeed and -1 if failure
 */
+
+// used for the tests of the different fonctions
+void iterate();
+
+int *isOk = 0;
+char buf[FESize];
 void kernel(void) {
-	char buf[FESize];
 	uchar buf1[BlockSize];
 	uchar buf2[BlockSize];
 	char *str;
-	int *isOk = 0;
-	int counter = 0;
 	stat_st stats;
 
 	init_syscalls(); 		// ecrase interruption 80 pour la notre
@@ -37,22 +40,16 @@ void kernel(void) {
 	*/
 	
 	interrupt(0x80, print_str, "========== Test de iterator ==========", 0, 0, 0);
-	 // iterator
-	while(isOk == 0){
-		if(interrupt(0x80,iter,&isOk,buf,0,0) != 0){
-			interrupt(0x80,print_str,"erreur iterator",0,0,0);
-		}else
-			interrupt(0x80,print_str,buf,0,0,0);
-		if(isOk == 1)
-			interrupt(0x80,print_str,"NO",0,0,0);
-		counter++;
-	} 
-	/*
-	/*
-	 //get stat MARCHE PAS
-	 if(interrupt(0x80, get_st,"test.txt",&stats,0,0) != 0)
+
+	// display what's in the FEs
+	iterate();
+	
+	//get stat MARCHE PAS
+	interrupt(0x80, print_str, "========== Test de get_stats ==========", 0, 0, 0);
+	
+	if(interrupt(0x80, get_st,"test.txt",&stats,0,0) != 0)
 		interrupt(0x80,print_str,"erreur get_stat",0,0,0);
-	*/
+	
 	
 	interrupt(0x80, print_str, "========== Test de read file ==========", 0, 0, 0);
 	 // read file
@@ -63,28 +60,16 @@ void kernel(void) {
 
 	
 	interrupt(0x80, print_str, "========== Test de remove file ==========", 0, 0, 0);
-	counter = 0;
-	isOk = 0;
-	while(isOk == 0){
-		if(interrupt(0x80,iter,&isOk,buf,0,0) != 0){
-			interrupt(0x80,print_str,"erreur iterator",0,0,0);
-		}else
-			interrupt(0x80,print_str,buf,0,0,0);
-		counter++;
-	} 
+	
+	// display what's in the FEs
+	iterate();
+
 	 // remove file
 	if(interrupt(0x80, remove_f,"test.txt",0,0,0)!= 0)
 		interrupt(0x80,print_str,"erreur remove_file",0,0,0);
 	
-	 // iterator
-	
-	isOk = 0;
-	while(isOk == 0){
-		if(interrupt(0x80,iter,&isOk,buf,0,0) != 0){
-			interrupt(0x80,print_str,"erreur iterator",0,0,0);
-		}else
-			interrupt(0x80,print_str,buf,0,0,0);
-	} 
+	 // display what's in the FEs
+	iterate();
 
 	// read string
 	while(1){
@@ -92,5 +77,15 @@ void kernel(void) {
 		interrupt(0x80,print_str,str,0,0,0);
 	} // évite d'aller lire plus loin
 
+}
+void iterate(){
+	isOk = 0;
+	while(isOk == 0){
+		if(interrupt(0x80,iter,&isOk,buf,0,0) != 0){
+			interrupt(0x80,print_str,"erreur iterator",0,0,0);
+		}else
+			if(strcomp(buf,"") != 0)// we don't weant to display empty FE
+				interrupt(0x80,print_str,buf,0,0,0);
+	} 
 }
 
