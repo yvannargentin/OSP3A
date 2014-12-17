@@ -9,7 +9,7 @@ extern int print_string(char *str);
 extern int read_string(char *buf);
 extern int read_sector(int sector, uchar *buf);
 extern int write_sector(int sector, uchar *buf);
-extern int iterator(int counter, char *buf);
+extern int iterator(int* isOk, char *buf);
 extern int get_stat(char *filename, struct stat_st *stat);
 extern int read_file(char *filename, unsigned char *buf);
 extern int remove_file(char *filename);

@@ -16,7 +16,7 @@ void kernel(void) {
 	uchar buf1[BlockSize];
 	uchar buf2[BlockSize];
 	char *str;
-	int isOk = 0;
+	int *isOk = 0;
 	int counter = 0;
 	stat_st stats;
 
@@ -38,14 +38,16 @@ void kernel(void) {
 	
 	interrupt(0x80, print_str, "========== Test de iterator ==========", 0, 0, 0);
 	 // iterator
-	while(isOk == 0 & counter < 10){
-		if(interrupt(0x80,iter,isOk,buf,0,0) != 0){
+	while(isOk == 0){
+		if(interrupt(0x80,iter,&isOk,buf,0,0) != 0){
 			interrupt(0x80,print_str,"erreur iterator",0,0,0);
 		}else
 			interrupt(0x80,print_str,buf,0,0,0);
+		if(isOk == 1)
+			interrupt(0x80,print_str,"NO",0,0,0);
 		counter++;
 	} 
-	
+	/*
 	/*
 	 //get stat MARCHE PAS
 	 if(interrupt(0x80, get_st,"test.txt",&stats,0,0) != 0)
@@ -63,8 +65,8 @@ void kernel(void) {
 	interrupt(0x80, print_str, "========== Test de remove file ==========", 0, 0, 0);
 	counter = 0;
 	isOk = 0;
-	while(isOk == 0 & counter < 10){
-		if(interrupt(0x80,iter,isOk,buf,0,0) != 0){
+	while(isOk == 0){
+		if(interrupt(0x80,iter,&isOk,buf,0,0) != 0){
 			interrupt(0x80,print_str,"erreur iterator",0,0,0);
 		}else
 			interrupt(0x80,print_str,buf,0,0,0);
@@ -75,14 +77,13 @@ void kernel(void) {
 		interrupt(0x80,print_str,"erreur remove_file",0,0,0);
 	
 	 // iterator
-	counter = 0;
+	
 	isOk = 0;
-	while(isOk == 0 & counter < 10){
-		if(interrupt(0x80,iter,isOk,buf,0,0) != 0){
+	while(isOk == 0){
+		if(interrupt(0x80,iter,&isOk,buf,0,0) != 0){
 			interrupt(0x80,print_str,"erreur iterator",0,0,0);
 		}else
 			interrupt(0x80,print_str,buf,0,0,0);
-		counter++;
 	} 
 
 	// read string

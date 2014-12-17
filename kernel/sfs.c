@@ -20,6 +20,8 @@ int iterator(int *isOk, char *buf) {
 	// divide by 2
 	char result[BlockSize];
 	int i;
+	*isOk = 0;
+
 	do{
 		counter++;
 
@@ -36,13 +38,13 @@ int iterator(int *isOk, char *buf) {
 	}while (&result[offset] == '0');
 	strncpy(buf,&result[offset],FESize);
 	//print_string(buf);
-	isOk = 0;
 	if (counter >= nbFE){
-		isOk = 1; // end of FE
+		*isOk = 1; // end of FE
 		counter = 0;
 		Shift = -1;
 	}
-
+	
+	
 	return 0;
 }
 
