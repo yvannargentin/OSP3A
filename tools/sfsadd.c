@@ -44,6 +44,10 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH_F]){
 						printf("impossible to open the file\n");
 						return; 
 					}else{
+						// empty the content of the rest
+						for (r=0; r< MAX_CONTENT; r++)
+							content[r] = 0;
+						
 						sfs->bitmap[i] |= (1<<j) ; // bit block used
 
 						// initalization of the file entry with the name and the length	
@@ -69,7 +73,8 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH_F]){
 						//fgets(content, MAX_CONTENT, fp); // get the content of the file
 						fread(content, MAX_CONTENT, 1 ,  fp); // get the content of the file	
 
-						// add the content int the fileContent matching to the index 
+						// add the content int the fileContent matching to the index
+						
 						for (r=0; r< MAX_CONTENT; r++){
 							if ((content[r] == '\n')){
 								sfs->fileContent[index][r] = 10;
@@ -82,9 +87,6 @@ void sfsadd(SimpleFileSystem *sfs , char filename[LENGTH_F]){
 
 						// See if we are at the end of the file
 						if(length <= sfs->fe[idFiles].size){
-							// empty the content of the rest
-							for (r=0; r< MAX_CONTENT; r++)
-								content[r] = 0;
 							
 							nbindex++; // next tabindex
 						
