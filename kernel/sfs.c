@@ -36,8 +36,8 @@ int iterator(int *isOk, char *buf) {
 			return -1; // error occured in read_sector
 		
 	}while (&result[offset] == '0');
-	strncpy(buf,&result[offset],FESize);
-	//print_string(buf);
+	strcpy(buf,&result[offset],FESize);
+
 	if (counter >= nbFE){
 		*isOk = 1; // end of FE
 		counter = 0;

@@ -65,7 +65,7 @@ int lengthInt(int a){
 }
 
 /*
-This fonction copy the content of a buf into another
+This fonction copy the content of a string into another
 \param s1 the buffer were we copy
 \param s2 the buffer that we copy
 \param n the length of the buffer s2
@@ -84,6 +84,25 @@ char* strncpy(char *s1, char *s2, int n){
     return s1;
 }
 
+/*
+This fonction copy the content of a buf into another without stopping if it encounters a \0
+\param s1 the buffer were we copy
+\param s2 the buffer that we copy
+\param n the length of the buffer s2
+\return the buffer s1
+*/
+char* strcpy(char *s1, char *s2, int n){
+    char *s = s1;
+    while (n > 0) {
+	*s++ = *s2++;
+	--n;
+    }
+    while (n > 0) {
+	*s++ = '\0';
+	--n;
+    }
+    return s1;
+}
 
 /*
 This fonction get the length of a string
