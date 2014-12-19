@@ -11,7 +11,7 @@
 #define get_st 6
 #define read_f 7
 #define remove_f 8
-#define execute 9
+#define exe 9
 
 int syscall(uint number, uint arg1, uint arg2, uint arg3, uint arg4) {
 	return interrupt(0x80, number,arg1,arg2,arg3,arg4);
@@ -37,6 +37,9 @@ read_string(char *buf){
 }
 
 int exec(char *filename, uint segment){
-	syscall(0x80,);
+	syscall(0x80,exe,filename,segment,0,0);
 }
-void exit();
+
+void exit(){
+	
+}
