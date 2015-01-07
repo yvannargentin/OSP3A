@@ -44,7 +44,7 @@ void kernel(void) {
 	// display what's in the FEs
 	iterate();
 	
-	//get stat MARCHE PAS
+	//get stat 
 	interrupt(0x80, print_str, "========== Test de get_stats ==========", 0, 0, 0);
 	
 	if(interrupt(0x80, get_st,"test.txt",&stats,0,0) != 0)
@@ -53,7 +53,7 @@ void kernel(void) {
 	
 	interrupt(0x80, print_str, "========== Test de read file ==========", 0, 0, 0);
 	 // read file
-	if(interrupt(0x80, read_f,"test.txt",buf1,0,0) != 0){
+	if(interrupt(0x80, read_f,"fichier.txt",buf1,0,0) != 0){
 		interrupt(0x80,print_str,"erreur read_file",0,0,0);
 	}else
 		interrupt(0x80,print_str,&buf1,0,0,0); 
@@ -65,7 +65,7 @@ void kernel(void) {
 	iterate();
 
 	 // remove file
-	if(interrupt(0x80, remove_f,"test.txt",0,0,0)!= 0)
+	if(interrupt(0x80, remove_f,"fichier.txt",0,0,0)!= 0)
 		interrupt(0x80,print_str,"erreur remove_file",0,0,0);
 	
 	 // display what's in the FEs
