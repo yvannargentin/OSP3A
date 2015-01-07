@@ -69,6 +69,12 @@ int syscall_handler(uint syscall_nb, uint arg1, uint arg2, uint arg3, uint arg4)
 			// arg1 = char *filename
 			return remove_file(arg1);
 		break;
+
+		
+		case exe : 
+			// arg1 = char *filename
+			return execute(arg1);
+		break;
 		
 		default : print_string("invalid use of interruption 0x80");
 			return -1;
