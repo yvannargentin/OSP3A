@@ -60,17 +60,15 @@ This fonction get the stats of the file and put it on a structure
 int get_stat(char *filename, struct stat_st *stat) {
 	
 	char buf[FESize];
-	int offset_size = OffsetSize; // 32	
-	int tmp;
-	int tmp2;
+	int offset_size = OffsetSize; // 32
 	int size;
 
 	int length_str;	
-	int *isOk = 0;
+	int *isOk;
 	char str[6]; //2**16 => 5 chars, slot for \0
 	int result= 0;
 	do {
-		if(iterator(&isOk, buf) != 0)
+		if(iterator(isOk, buf) != 0)
 			return -1; // error occured in iterator
 	} while ((strcomp(&buf, filename) != 0) && (isOk == 0));
 
@@ -81,18 +79,13 @@ int get_stat(char *filename, struct stat_st *stat) {
 			return -1; // error occured in print_string
 		return -1;
 	}
-
-	tmp = buf[offset_size++];
-	tmp2 = buf[offset_size];
-	size = tmp+(tmp2<<8);
+	//Copy 34 first bytes of buffer into stat (filename+size)
+	strncpy(stat, buf, 32+2, 1);
 	
-	//Copy filename in structure
-	strncpy(stat->filename, filename, OffsetSize, 0);
-	stat->size = size;
+	//Calcul de la taille du string qui va contenir la taille
+	length_str = lengthInt(stat->size);
 	
-	length_str = lengthInt(size);
-	
-	intTostr(str, size, length_str);
+	intTostr(str, stat->size, length_str);
 
 	if(interrupt(0x80,print_str,stat->filename,0,0,0)!= 0)
 		return -1; // error occured in print_string
@@ -100,8 +93,8 @@ int get_stat(char *filename, struct stat_st *stat) {
 		return -1; // error occured in print_string
 
 	
-	while(isOk == 0) // we still want to reset the iterator so we keep iterating till isOk == 1
-		if(iterator(&isOk, buf) != 0)
+	while(*isOk == 0) // we still want to reset the iterator so we keep iterating till isOk == 1
+		if(iterator(isOk, buf) != 0)
 			return -1; // error occured in iterator
 
 	return 0;
