@@ -1,8 +1,13 @@
-#include "libc.h"
+#include "libc.c"
 
 #define MAX_COMMANDE_LENGTH 20
 #define MAX_PARAM_LENGTH 100
 
+void ls();
+void cat(char* file);
+void rm(char* rm);
+void run(char* run);
+void help();
 
 int main(int argc, char** argv) {
 
@@ -19,7 +24,8 @@ int main(int argc, char** argv) {
 		int gotParams = 0;
 		int commandeLength;
 
-		for(int i = 0; i<strlen;i++) {
+		int i;
+		for(i = 0; i<length;i++) {
 			// Search for parameters
 			if(commandeLine[i] == ' ') 
 				gotParams++;
@@ -51,20 +57,34 @@ int main(int argc, char** argv) {
 		if(strcmp(commande, "run") == 0)
 			run(param);
 	}
+
+	exit();
 }
 
 
 
 void ls() {
+	
 }
 
 void cat(char* file) {
+	unsigned char buffer[1024];
+	if(read_file(file, buffer) == 0) 
+		print_string(buffer);
+	else
+		print_string("Unable to read file");
 }
 
 void rm(char* rm) {
+	if(remove_file(rm) == 0)
+		print_string("File successfully removed\n");
+	else
+		print_string("Unable to remove file");
 }
 
 void run(char* run) {
+	if(exec(run, 0x3000) != 0)
+		print_string("Unable to execute file");
 }
 
 void help() {
