@@ -89,20 +89,26 @@ void intTostr(char* s, int a) {
 
 void memcpy(uchar *dest, uchar *src, uint count){
 
-	// check the length of dest
-	if (strlen(dest) < count) count = strlen(dest);
+	uint i = 0;
 
-	for (uint i = 0; i < count; i++){
-		dest[i] = src[i];
+	// check the length of dest
+	if (strlen(dest) < count) count = strlen(dest);
+
+	for (i = 0; i < count; i++){
+		dest[i] = src[i];
 	}
 		
 }
 
 void memset(uchar *dest, uchar val, uint count){
+
+	uint i = 0;
+
 	// check the length of dest
 	if(strlen(dest) < count) count = strlen(dest);
-	for (uint i = 0; i < count; i++)
-		dest[i] = val;
+
+	for (i = 0; i < count; i++)
+		dest[i] = val;
 }
 
 uint strlen(char *s){
