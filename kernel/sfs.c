@@ -199,8 +199,10 @@ int read_file(char *filename, unsigned char *buf){
 	unsigned char content[BlockSize];
 	int tmp;
 	int tmp2;
-	char *str;
 	int r;
+	int temp = 0;
+	char str[3]; //espace prevu pour le \0
+	int length_str = 0;
 
 	//get the right sector number and the buffer of this sector
 	//a sector as 2 FileEntries
@@ -226,7 +228,6 @@ int read_file(char *filename, unsigned char *buf){
 	print_string(&sect[offset]);
 
 	indexes += offset; // get where the tabIndexes starts
-
 	// iterate on the tabIndexes used
 	do {
 		// empty the content of the rest
@@ -237,23 +238,26 @@ int read_file(char *filename, unsigned char *buf){
 		tmp2 = sect[indexes++];
 		index = tmp+(tmp2<<8);
 		index *= 2;
+		temp++;
 
-		if (index != 0){	
-			nb_sector_fc = FCStart + index  ;
+		if (index != 0 ){
+			if (temp < NbTab + 1){	
+				nb_sector_fc = FCStart + index  ;
 			
-			// read the content of fileContent 
-			if(interrupt(0x80,read_sect,nb_sector_fc, content,0,0) != 0)
-				return -1; // error occured in read_sector
-			strncpy(buf,&content, BlockSize, 0); // copy the content in the buffer
-		
-			// content separted in 2 sectors
-			if (lengthStr(content) == BlockSize){
-				if(interrupt(0x80,read_sect,nb_sector_fc+1, content,0,0) != 0)
+				// read the content of fileContent 
+				if(interrupt(0x80,read_sect,nb_sector_fc, content,0,0) != 0)
 					return -1; // error occured in read_sector
-				strncpy(buf, &content, BlockSize, 0); // copy the content in the buffer
+				strncpy(buf,&content, BlockSize, 0); // copy the content in the buffer
+		
+				// content separted in 2 sectors
+				if (lengthStr(content) == BlockSize){
+					if(interrupt(0x80,read_sect,nb_sector_fc+1, content,0,0) != 0)
+						return -1; // error occured in read_sector
+					strncpy(buf, &content, BlockSize, 0); // copy the content in the buffer
+				}
 			}
+			
 		}
-
 	} while (index != 0);
 	// interrupt(0x80,print_str, "file readed", 0, 0,0);
 	return 0;	

@@ -21,6 +21,7 @@
 #define TabIndexesStart 34
 #define MaxFe 64
 #define OffsetSize 32
+#define NbTab 111
 
 typedef unsigned char uchar;
 typedef unsigned int uint;

@@ -13,6 +13,7 @@ extern int iterator(int* isOk, char *buf);
 extern int get_stat(char *filename, struct stat_st *stat);
 extern int read_file(char *filename, unsigned char *buf);
 extern int remove_file(char *filename);
+extern int execute(char *filename, uint seg);
 
 /*
 This fonction content the switch 
@@ -73,7 +74,7 @@ int syscall_handler(uint syscall_nb, uint arg1, uint arg2, uint arg3, uint arg4)
 		
 		case exe : 
 			// arg1 = char *filename
-			return execute(arg1);
+			return execute(arg1, arg2);
 		break;
 		
 		default : print_string("invalid use of interruption 0x80");

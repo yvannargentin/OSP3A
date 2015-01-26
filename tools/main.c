@@ -56,6 +56,9 @@ int main(int argc, char **argv){
 	SimpleFileSystem sf = sfscreate("sfs");
 	sfsadd(&sf, "test.txt\0");
 	sfsadd(&sf, "fichier.txt\0");
+	sfsadd(&sf, "test.c\0");
+	sfsadd(&sf, "test.o\0");
+	sfsadd(&sf, "test.bin\0");
 	sfsls(sf);
 	//sfsdel(&sf, "test.txt");
 	//sfsls(sf);

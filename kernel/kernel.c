@@ -11,21 +11,26 @@ This fonction get the stats of the file and put it on a structure
 \param stat_st *stat the structure that we fill
 \return return 0 if succeed and -1 if failure
 */
-
 // used for the tests of the different fonctions
 void iterate();
 
 int *isOk = 0;
 char buf[FESize];
+
 void kernel(void) {
 	uchar buf1[BlockSize];
 	uchar buf2[BlockSize];
 	char *str;
 	stat_st stats;
+	
+	init_syscalls();
 
-	init_syscalls(); 		// ecrase interruption 80 pour la notre
-	// print string
-
+	print_string("in kernel\0");
+	if( execute("test.bin" , 0x5001) != 0 ) 
+		print_string("erreur execute");
+	else 
+		print_string("back to kernel\0");
+/*
 	interrupt(0x80,print_str,"Welcome to OSP3A\0",0,0,0);
 	//interrupt(0x80,print_str,"Decommentez votre code dans le kernel pour tester\0",0,0,0);
 
@@ -58,7 +63,7 @@ void kernel(void) {
 	}else
 		interrupt(0x80,print_str,&buf1,0,0,0); 
 
-	
+	/*
 	interrupt(0x80, print_str, "========== Test de remove file ==========", 0, 0, 0);
 	
 	// display what's in the FEs
@@ -69,7 +74,7 @@ void kernel(void) {
 		interrupt(0x80,print_str,"erreur remove_file",0,0,0);
 	
 	 // display what's in the FEs
-	iterate();
+	iterate();*/
 
 	// read string
 	while(1){
@@ -78,6 +83,7 @@ void kernel(void) {
 	} // évite d'aller lire plus loin
 
 }
+
 void iterate(){
 	isOk = 0;
 	while(isOk == 0){
@@ -88,4 +94,5 @@ void iterate(){
 				interrupt(0x80,print_str,buf,0,0,0);
 	} 
 }
+
 

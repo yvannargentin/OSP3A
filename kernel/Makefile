@@ -5,7 +5,7 @@ CFLAGS=-W -V -I -ansi
 
 all : build
 
-build : ../object/main.o ../object/kernel.o ../object/io.o ../object/sfs.o ../object/sector.o ../object/library.o ../object/syscall_handler.o ../object/util_asm.o ../object/interrupt.o ../object/disk_sector.o ../object/jump.o ../object/memputb.o
+build : ../object/main.o ../object/kernel.o ../object/io.o ../object/sfs.o ../object/sector.o ../object/library.o ../object/exec.o ../object/syscall_handler.o ../object/util_asm.o ../object/interrupt.o ../object/disk_sector.o ../object/ass_exec.o  test.bin
 
 rebuild : clean build
 
@@ -27,6 +27,9 @@ rebuild : clean build
 ../object/library.o : library.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+../object/exec.o : exec.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
 ../object/syscall_handler.o : syscall_handler.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -39,12 +42,8 @@ rebuild : clean build
 ../object/disk_sector.o :  disk_sector.s
 	as86 $ $< -o $@
 
-../object/jump.o :  jump.s
+../object/ass_exec.o :  ass_exec.s
 	as86 $ $< -o $@
-
-../object/memputb.o :  memputb.s
-	as86 $ $< -o $@
-
 
 clean :
 	rm -rf ../object/*.o
