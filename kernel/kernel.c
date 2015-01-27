@@ -26,11 +26,11 @@ void kernel(void) {
 	init_syscalls();
 
 	print_string("in kernel\0");
-	if( execute("test.bin" , 0x5001) != 0 ) 
+	if( execute("hw.bin" , 0x5001) != 0 ) 
 		print_string("erreur execute");
 	else 
 		print_string("back to kernel\0");
-/*
+
 	interrupt(0x80,print_str,"Welcome to OSP3A\0",0,0,0);
 	//interrupt(0x80,print_str,"Decommentez votre code dans le kernel pour tester\0",0,0,0);
 
@@ -63,7 +63,7 @@ void kernel(void) {
 	}else
 		interrupt(0x80,print_str,&buf1,0,0,0); 
 
-	/*
+	
 	interrupt(0x80, print_str, "========== Test de remove file ==========", 0, 0, 0);
 	
 	// display what's in the FEs
@@ -74,7 +74,7 @@ void kernel(void) {
 		interrupt(0x80,print_str,"erreur remove_file",0,0,0);
 	
 	 // display what's in the FEs
-	iterate();*/
+	iterate();
 
 	// read string
 	while(1){

@@ -32,7 +32,7 @@ int iterator(int *isOk, char *buf) {
 			Shift++;
 		}
 
-		if(interrupt(0x80,read_sect,FeStart + Shift, result,0,0) != 0)
+		if(interrupt(DRIVE,read_sect,FeStart + Shift, result,0,0) != 0)
 			return -1; // error occured in read_sector
 		
 	}while (&result[offset] == '0');
@@ -74,7 +74,7 @@ int get_stat(char *filename, struct stat_st *stat) {
 
 	//If the file doesnt exist
 	if(isOk == 1){
-		//interrupt(0x80,print_str,"File not found",0,0,0);
+		//interrupt(DRIVE,print_str,"File not found",0,0,0);
 		if(print_string("File not found")!= 0)
 			return -1; // error occured in print_string
 		return -1;
@@ -87,9 +87,9 @@ int get_stat(char *filename, struct stat_st *stat) {
 	
 	intTostr(str, stat->size, length_str);
 
-	if(interrupt(0x80,print_str,stat->filename,0,0,0)!= 0)
+	if(interrupt(DRIVE,print_str,stat->filename,0,0,0)!= 0)
 		return -1; // error occured in print_string
-	if(interrupt(0x80,print_str,str,0,0,0)!= 0)
+	if(interrupt(DRIVE,print_str,str,0,0,0)!= 0)
 		return -1; // error occured in print_string
 
 	
@@ -120,13 +120,13 @@ int remove_file(char *filename) {
 	unsigned int tmp;
 	unsigned int tmp2;
 
-	if(interrupt(0x80,read_sect,noSector, buf,0,0)!= 0) 
+	if(interrupt(DRIVE,read_sect,noSector, buf,0,0)!= 0) 
 		return -1; // error occured in read_sector
 
 	// Find 
 	while (strcomp(&buf[offset],filename) != 0 || counter > MaxFe) {
 
-		if(interrupt(0x80,read_sect,noSector, buf,0,0)!= 0) 
+		if(interrupt(DRIVE,read_sect,noSector, buf,0,0)!= 0) 
 			return -1; // error occured in read_sector
 
 		// Inc counter each 2 fe (one sector contains 2 fe)
@@ -149,7 +149,7 @@ int remove_file(char *filename) {
 	buf[offset] = 0;
 
 	// Load bitmap
-	if(interrupt(0x80, read_sect, BtmStart, map, 0, 0) != 0)
+	if(interrupt(DRIVE, read_sect, BtmStart, map, 0, 0) != 0)
 		return -1; // error occured in read_sector
 
 	// Get the offset of the first file index
@@ -170,13 +170,13 @@ int remove_file(char *filename) {
 	} while(indexF != 0);
 
 	// Saving bitmap to image
-	if(interrupt(0x80, write_sect, BtmStart, map, 0, 0)!= 0)
+	if(interrupt(DRIVE, write_sect, BtmStart, map, 0, 0)!= 0)
 		return -1; // error occured in write_sector
 	// Saving file entry sector
-	if(interrupt(0x80, write_sect, noSector, buf, 0, 0)!= 0) 
+	if(interrupt(DRIVE, write_sect, noSector, buf, 0, 0)!= 0) 
 		return -1; // error occured in write_sector
 
-	if(interrupt(0x80, print_str, "File deleted", 0, 0, 0) != 0)
+	if(interrupt(DRIVE, print_str, "File deleted", 0, 0, 0) != 0)
 		return -1; // error occured with print_string
 
 	return 0;
@@ -189,25 +189,21 @@ This fonction read the content of the file in param and fill a buffer with it
 \return return 0 if succeed and -1 if failure
 */
 int read_file(char *filename, unsigned char *buf){
+	unsigned char sect[BlockSize];
+	unsigned char content[BlockSize*2];
+	unsigned char temp[BlockSize*2];
 	int nb_sector_fe = FeStart;
 	int offset = 0;
-	unsigned char sect[BlockSize];
 	int cpt = 0;
-	int index;
-	int indexes = TabIndexesStart;
+	int nb = 0;
 	int nb_sector_fc = 0;
-	unsigned char content[BlockSize];
-	int tmp;
-	int tmp2;
-	int r;
-	int temp = 0;
-	char str[3]; //espace prevu pour le \0
-	int length_str = 0;
+	int indexes = TabIndexesStart;
+	int tmp,tmp2,r, index, i;
 
 	//get the right sector number and the buffer of this sector
 	//a sector as 2 FileEntries
 	do {
-		if(interrupt(0x80,read_sect,nb_sector_fe, sect,0,0) != 0)
+		if(interrupt(DRIVE,read_sect,nb_sector_fe, sect,0,0) != 0)
 			return -1; //error occured in read_sector
 
 		if(modulo(cpt,2) == 1)
@@ -219,7 +215,7 @@ int read_file(char *filename, unsigned char *buf){
 		else
 			offset = 0;
 
-		// exit if the file is note found
+		// exit if the file is not found
 		if (cpt > MaxFe)
 			return -1;
 
@@ -238,28 +234,27 @@ int read_file(char *filename, unsigned char *buf){
 		tmp2 = sect[indexes++];
 		index = tmp+(tmp2<<8);
 		index *= 2;
-		temp++;
+		nb++;
 
 		if (index != 0 ){
-			if (temp < NbTab + 1){	
+			if (nb < NbTab + 1){	
 				nb_sector_fc = FCStart + index  ;
-			
 				// read the content of fileContent 
-				if(interrupt(0x80,read_sect,nb_sector_fc, content,0,0) != 0)
+				if(interrupt(DRIVE,read_sect,nb_sector_fc, content,0,0) != 0)
 					return -1; // error occured in read_sector
-				strncpy(buf,&content, BlockSize, 0); // copy the content in the buffer
-		
+				else
+					strncpy(buf,&content, BlockSize, 1); // copy the content in the buffer
+
 				// content separted in 2 sectors
 				if (lengthStr(content) == BlockSize){
-					if(interrupt(0x80,read_sect,nb_sector_fc+1, content,0,0) != 0)
+					if(interrupt(DRIVE,read_sect,nb_sector_fc+1, content,0,0) != 0)
 						return -1; // error occured in read_sector
-					strncpy(buf, &content, BlockSize, 0); // copy the content in the buffer
+					else
+						strncpy(buf, &content, BlockSize, 1); // copy the content in the buffer
 				}
 			}
-			
 		}
 	} while (index != 0);
-	// interrupt(0x80,print_str, "file readed", 0, 0,0);
 	return 0;	
 }
 

@@ -1,3 +1,6 @@
+;\file ass_exec.s
+;\brief this file content the fonctions memputb, jump and exit
+
 STACK_OFFS equ 0xfbfe ; offset at which the stack starts
 .global _jump
 .global _memputb
