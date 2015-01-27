@@ -19,3 +19,23 @@ typedef struct stat_st {
 	char filename[32];
 	int size;
 } stat_st;
+
+// entetes des fonctions de la libc
+
+int syscall(uint number, uint arg1, uint arg2, uint arg3, uint arg4);
+int read_file(char *filename, uchar *buf);
+int get_stat(char *filename, stat_st *stat);
+int remove_file(char *filename);
+void read_string(char *buf);
+int exec(char *filename, uint segment);
+void exit();
+int lengthInt(int a);
+void intTostr(char* s, int a);
+void memcpy(uchar *dest, uchar *src, uint count);
+void memset(uchar *dest, uchar val, uint count);
+uint strlen(char *s);
+char* strcpy(char *s1, char *s2);
+int strcmp(char *s1, char *s2);
+int print_string(char *str);
+void print_uint(uint number);
+int iterator(int *isOk, char *buf);
