@@ -5,12 +5,14 @@ CFLAGS=-W -V -I -ansi
 
 all : build
 
-build : helloworld.bin
+build : shell.bin
 
 rebuild : clean build
 
-helloworld.bin : helloworld.c
+shell.bin : shell.c
 	$(CC) $(CFLAGS) -c $< -o $@
+
+
 
 clean :
 	rm -rf *.o
