@@ -22,6 +22,7 @@
 #define MaxFe 64
 #define OffsetSize 32
 #define NbTab 111
+#define DRIVE 0x80
 
 typedef unsigned char uchar;
 typedef unsigned int uint;
