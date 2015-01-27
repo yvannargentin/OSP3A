@@ -139,11 +139,17 @@ int strcmp(char *s1, char *s2){
 
 
 int print_string(char *str){
-	return syscall(0x80,print_str,str,0,0);
+	return syscall(sys_handl,print_str,str,0,0);
 }
 
 void print_uint(uint number){
 	char *str;
 	intTostr(str, number);
-	syscall(0x80,print_str,str,0,0);
+	syscall(sys_handl,print_str,str,0,0);
 }
+
+int iterator(int *isOk, char *buf){
+	return syscall(sys_handl, number,&isOk,buf,0,0);
+}
+
+
