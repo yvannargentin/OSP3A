@@ -2,7 +2,7 @@ typedef unsigned char uchar;
 typedef unsigned int uint;
 
 #define print_str 1
-#define read_str 2
+#define read_str 2 
 #define read_sect 3
 #define write_sect 4
 #define iter 5
